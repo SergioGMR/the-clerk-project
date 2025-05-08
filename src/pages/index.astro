@@ -1,16 +1,405 @@
 ---
+import Layout from "@layouts/Layout.astro";
+import {
+    getChannelData,
+    extractAllTags,
+} from "@utils/channelDataProvider";
 
+// Get channel data from the data provider utility
+const { groups, channels, formattedDate } = await getChannelData();
+
+// Extract all unique tags across all groups
+const allTags = extractAllTags(groups);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Channel Groups | Directory">
+    <div class="py-8 px-4 sm:px-6 lg:px-8">
+        <!-- Channel count and last updated -->
+        <div
+            class="flex flex-col md:flex-row md:items-center md:justify-between mb-6"
+        >
+            <h1 class="text-2xl font-bold text-white">
+                Channel Group Directory
+            </h1>
+
+            <div class="flex items-center mt-2 md:mt-0">
+                <p class="text-zinc-400 text-sm">
+                    Last updated: <span class="text-zinc-300"
+                        >{formattedDate}</span
+                    >
+                </p>
+                <form action="/api/refresh-channels" method="post" class="ml-3">
+                    <button
+                        type="submit"
+                        id="refresh-channels-btn"
+                        class="inline-flex items-center px-3 py-1 text-xs font-medium rounded border border-zinc-700 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors"
+                        title="Refresh channel data"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-3.5 w-3.5 mr-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                            ></path>
+                        </svg>
+                        Refresh
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Search field -->
+        <div class="relative mb-6">
+            <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+                <svg
+                    class="h-5 w-5 text-zinc-400"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </div>
+            <input
+                type="search"
+                id="desktop-group-search"
+                class="block w-full pl-10 pr-3 py-2 bg-zinc-800 border border-zinc-700 rounded-md leading-5 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                placeholder="Search group names..."
+            />
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Filters sidebar -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Tags filter -->
+                <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
+                    <h2 class="text-lg font-medium text-white mb-3">Tags</h2>
+                    <div class="max-h-60 overflow-y-auto pr-2 space-y-1">
+                        <div class="relative">
+                            <input
+                                type="search"
+                                id="tag-search"
+                                class="block w-full pl-3 pr-3 py-1.5 mb-3 text-sm bg-zinc-800 border border-zinc-700 rounded-md text-white placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-red-500"
+                                placeholder="Filter tags..."
+                            />
+                        </div>
+                        <div id="tags-container" class="space-y-1">
+                            {
+                                allTags.map((tag) => (
+                                    <label class="flex items-center tag-item">
+                                        <input
+                                            type="checkbox"
+                                            name="tag"
+                                            value={tag}
+                                            class="h-4 w-4 text-red-600 focus:ring-red-500 border-zinc-600 bg-zinc-800"
+                                        />
+                                        <span class="ml-2 text-zinc-200 text-sm">
+                                            {tag}
+                                        </span>
+                                    </label>
+                                ))
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset filters -->
+                <button
+                    id="reset-filters-btn"
+                    class="w-full py-2 px-4 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-center font-medium"
+                >
+                    Reset Filters
+                </button>
+            </div>
+
+            <!-- Group grid and info -->
+            <div class="lg:col-span-3">
+                <!-- Channel count -->
+                <p class="text-zinc-400 mb-4">
+                    Found <span
+                        id="group-count"
+                        class="font-semibold text-white">{groups.length}</span
+                    > channel groups ({channels.length} total channels)
+                </p>
+
+                <!-- Groups grid -->
+                <div
+                    id="groups-grid"
+                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4"
+                >
+                    {
+                        groups.map((group) => (
+                            <a
+                                href={`/group/${group.name}`}
+                                data-name={group.name}
+                                data-display-name={group.displayName}
+                                data-tags={group.tags?.join(",")}
+                                data-channels-count={group.channels.length}
+                                class="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden hover:border-red-500 transition-all hover:shadow-lg hover:shadow-red-900/20 group-card"
+                            >
+                                <div class="bg-gradient-to-r from-zinc-800 to-zinc-900 px-4 py-3 border-b border-zinc-700">
+                                    <h3 class="text-lg font-medium text-white truncate">
+                                        {group.displayName}
+                                    </h3>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="flex items-center">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                class="h-5 w-5 text-zinc-400 mr-1"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                            >
+                                                <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                                            </svg>
+                                            <span class="text-zinc-400 text-sm">
+                                                {group.channels.length} channels
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {group.tags && group.tags.length > 0 && (
+                                        <div class="flex flex-wrap gap-1 mt-1">
+                                            {group.tags.map((tag) => (
+                                                <span class="inline-block px-2 py-0.5 rounded text-xs bg-zinc-800/50 text-zinc-400 border border-zinc-700/50">
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    <div class="mt-4 flex justify-between items-center">
+                                        <div class="flex flex-wrap gap-x-1 gap-y-2">
+                                            {group.channels
+                                                .slice(0, 3)
+                                                .map((channel) => (
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-zinc-800 text-zinc-300 truncate max-w-[100px]">
+                                                        {channel.name.substring(
+                                                            0,
+                                                            12,
+                                                        )}
+                                                        {channel.name.length >
+                                                        12
+                                                            ? "..."
+                                                            : ""}
+                                                    </span>
+                                                ))}
+                                            {group.channels.length > 3 && (
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-900/40 text-red-300">
+                                                    +{group.channels.length - 3}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <span class="text-red-500">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                class="h-5 w-5"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                            >
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                    clip-rule="evenodd"
+                                                />
+                                            </svg>
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        ))
+                    }
+                </div>
+
+                <!-- No results message -->
+                <div id="no-results" class="hidden py-12 text-center">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="mx-auto h-12 w-12 text-zinc-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20a8 8 0 100-16 8 8 0 000 16z"
+                        ></path>
+                    </svg>
+                    <h3 class="mt-2 text-lg font-medium text-white">
+                        No channel groups found
+                    </h3>
+                    <p class="mt-1 text-zinc-500">
+                        Try changing your search or filter criteria.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading state -->
+    <div
+        id="loading-indicator"
+        class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+    >
+        <div class="text-center p-4">
+            <div
+                class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600 mx-auto"
+            >
+            </div>
+            <p class="mt-4 text-white font-medium">Loading groups...</p>
+        </div>
+    </div>
+</Layout>
+
+<script>
+    import { filterGroups, filterTags } from "../scripts/channelFilters.js";
+
+    // DOM Elements
+    const groupsGrid = document.getElementById("groups-grid");
+    const groupCount = document.getElementById("group-count");
+    const noResultsMessage = document.getElementById("no-results");
+    const groupSearch = document.getElementById("desktop-group-search");
+    const tagSearch = document.getElementById("tag-search");
+    const resetFiltersBtn = document.getElementById("reset-filters-btn");
+    const allGroups = document.querySelectorAll("#groups-grid > a");
+    const tagCheckboxes = document.querySelectorAll('input[name="tag"]');
+    const tagItems = document.querySelectorAll(".tag-item");
+
+    // Filter state
+    let currentSearchTerm = "";
+    let selectedTags: string[] = [];
+
+    // Event: Search input
+    if (groupSearch) {
+        groupSearch.addEventListener("input", () => {
+            currentSearchTerm = (groupSearch as HTMLInputElement).value.toLowerCase().trim();
+            filterGroups(
+                allGroups,
+                currentSearchTerm,
+                selectedTags,
+                groupCount,
+                noResultsMessage,
+            );
+        });
+    }
+
+    // Event: Tag search
+    if (tagSearch) {
+        tagSearch.addEventListener("input", () => {
+            const searchTerm = (tagSearch as HTMLInputElement).value.toLowerCase().trim();
+            filterTags(tagItems, searchTerm);
+        });
+    }
+
+    // Event: Tag filter
+    tagCheckboxes.forEach((checkbox) => {
+        checkbox.addEventListener("change", () => {
+            selectedTags = Array.from(tagCheckboxes)
+                .filter((cb) => (cb as HTMLInputElement).checked)
+                .map((cb) => (cb as HTMLInputElement).value);
+            filterGroups(
+                allGroups,
+                currentSearchTerm,
+                selectedTags,
+                groupCount,
+                noResultsMessage,
+            );
+        });
+    });
+
+    // Event: Reset filters
+    if (resetFiltersBtn) {
+        resetFiltersBtn.addEventListener("click", () => {
+            // Reset search
+            if (groupSearch) {
+                (groupSearch as HTMLInputElement).value = "";
+                currentSearchTerm = "";
+            }
+
+            // Reset tag search
+            if (tagSearch) {
+                (tagSearch as HTMLInputElement).value = "";
+                filterTags(tagItems, "");
+            }
+
+            // Reset tags
+            tagCheckboxes.forEach((checkbox) => {
+                (checkbox as HTMLInputElement).checked = false;
+            });
+            selectedTags = [];
+
+            // Apply filters
+            filterGroups(
+                allGroups,
+                currentSearchTerm,
+                selectedTags,
+                groupCount,
+                noResultsMessage,
+            );
+        });
+    }
+
+    // Refresh button handling
+    const refreshButton = document.getElementById("refresh-channels-btn");
+    if (refreshButton) {
+        refreshButton.addEventListener("click", async (e) => {
+            e.preventDefault();
+
+            // Show loading indicator
+            const loadingIndicator =
+                document.getElementById("loading-indicator");
+            if (loadingIndicator) {
+                loadingIndicator.classList.remove("hidden");
+            }
+
+            try {
+                // Call the refresh API endpoint
+                const response = await fetch("/api/refresh-channels", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                if (response.ok) {
+                    // Reload the page to show new data
+                    window.location.reload();
+                } else {
+                    console.error("Failed to refresh channels");
+                    // Hide loading indicator
+                    if (loadingIndicator) {
+                        loadingIndicator.classList.add("hidden");
+                    }
+                    alert(
+                        "Failed to refresh channel data. Please try again later.",
+                    );
+                }
+            } catch (error) {
+                console.error("Error refreshing channels:", error);
+                // Hide loading indicator
+                if (loadingIndicator) {
+                    loadingIndicator.classList.add("hidden");
+                }
+                alert(
+                    "Error refreshing channel data. Please check your connection and try again.",
+                );
+            }
+        });
+    }
+</script>

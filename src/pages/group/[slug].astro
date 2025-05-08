@@ -1,0 +1,348 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { getChannelData, extractAllTags } from "@utils/channelDataProvider";
+import { getChannelUrl, getChannelLogo } from "@utils/channelScraper";
+
+// Get the slug from params
+const { slug } = Astro.params;
+
+// Get channel data
+const { groups } = await getChannelData();
+
+// Find the current group by its slug
+const currentGroup = groups.find(group => group.name === slug);
+
+// Handle 404 if group not found
+if (!currentGroup) {
+  return Astro.redirect('/404');
+}
+
+// Organize channel quality types for filtering
+const qualityTypes = [...new Set(
+  currentGroup.channels
+    .map(channel => channel.quality)
+    .filter(Boolean)
+)].sort();
+---
+
+<Layout title={`${currentGroup.displayName} | Acestream Directory`}>
+  <div class="py-8 px-4 sm:px-6 lg:px-8">
+    <!-- Back link and group title -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+      <div>
+        <a href="/" class="inline-flex items-center text-sm text-zinc-400 hover:text-white mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Back to Groups
+        </a>
+        <h1 class="text-2xl font-bold text-white">{currentGroup.displayName}</h1>
+      </div>
+      
+      <div class="mt-2 sm:mt-0">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-zinc-800 text-zinc-300">
+          {currentGroup.channels.length} Channels
+        </span>
+      </div>
+    </div>
+
+    <!-- Group tags -->
+    {currentGroup.tags && currentGroup.tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-6">
+        {currentGroup.tags.map((tag) => (
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-zinc-800 text-zinc-300">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+
+    <!-- Filter controls -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-4 mb-6">
+      <div class="flex flex-col sm:flex-row gap-4">
+        <!-- Search -->
+        <div class="flex-1">
+          <label for="channel-search" class="block text-sm font-medium text-zinc-400 mb-1">Search</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-zinc-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <input type="search" id="channel-search" class="block w-full pl-10 pr-3 py-2 bg-zinc-800 border border-zinc-700 rounded-md leading-5 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 sm:text-sm" placeholder="Search channels...">
+          </div>
+        </div>
+
+        <!-- Quality Filter -->
+        {qualityTypes.length > 0 && (
+          <div>
+            <label for="quality-filter" class="block text-sm font-medium text-zinc-400 mb-1">Quality</label>
+            <select id="quality-filter" class="block w-full py-2 pl-3 pr-10 bg-zinc-800 border border-zinc-700 rounded-md leading-5 text-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 sm:text-sm">
+              <option value="">All Qualities</option>
+              {qualityTypes.map((quality) => (
+                <option value={quality}>{quality}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <!-- Sort By -->
+        <div>
+          <label for="sort-by" class="block text-sm font-medium text-zinc-400 mb-1">Sort By</label>
+          <select id="sort-by" class="block w-full py-2 pl-3 pr-10 bg-zinc-800 border border-zinc-700 rounded-md leading-5 text-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 sm:text-sm">
+            <option value="name">Name</option>
+            <option value="quality">Quality</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Channel grid -->
+    <div id="channels-container">
+      <div id="channels-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {currentGroup.channels.map((channel) => (
+          <div data-name={channel.name.toLowerCase()} data-quality={channel.quality || ''} class="channel-card bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden hover:border-red-500 transition-colors">
+            <div class="p-4 flex items-start">
+              <!-- Channel icon/logo -->
+              <div class="mr-3 flex-shrink-0">
+                <div class="w-12 h-12 rounded-md bg-gradient-to-br from-zinc-700 to-zinc-800 flex items-center justify-center text-xl font-bold text-white">
+                  {channel.name.substring(0, 2).toUpperCase()}
+                </div>
+              </div>
+              
+              <!-- Channel info -->
+              <div class="flex-1 min-w-0">
+                <h3 class="text-lg font-medium text-white truncate" title={channel.name}>
+                  {channel.name}
+                </h3>
+                <div class="flex flex-wrap gap-1 mt-1">
+                  {channel.quality && (
+                    <span class="inline-block px-2 py-0.5 rounded text-xs bg-green-900/50 text-green-300 border border-green-800/50">
+                      {channel.quality}
+                    </span>
+                  )}
+                  {channel.category && (
+                    <span class="inline-block px-2 py-0.5 rounded text-xs bg-blue-900/50 text-blue-300 border border-blue-800/50">
+                      {channel.category}
+                    </span>
+                  )}
+                </div>
+                
+                {/* Channel tags if available */}
+                {channel.tags && channel.tags.length > 0 && (
+                  <div class="mt-2 flex flex-wrap gap-1">
+                    {channel.tags.map((tag) => (
+                      <span class="inline-block px-1.5 py-0.5 rounded text-xs bg-zinc-800 text-zinc-400">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div class="bg-zinc-800/50 px-4 py-3 border-t border-zinc-700 flex justify-between items-center">
+              <div>
+                <span class="text-xs text-zinc-400">
+                  {channel.url?.startsWith('acestream://') ? 'Acestream' : 'URL Link'}
+                </span>
+              </div>
+              
+              <div class="flex space-x-2">
+                <button 
+                  type="button" 
+                  class="favorite-btn inline-flex items-center p-1.5 border border-zinc-700 rounded-md bg-zinc-800 hover:bg-zinc-700 transition-colors"
+                  data-channel-id={channel.id}
+                  title="Add to favorites"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </button>
+                
+                <a 
+                  href={getChannelUrl(channel)}
+                  target={channel.url?.startsWith('acestream://') ? '_self' : '_blank'}
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center p-1.5 border border-red-600 rounded-md bg-red-600 hover:bg-red-700 transition-colors"
+                  title="Open channel"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- No results message -->
+      <div id="no-results" class="hidden py-12 text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20a8 8 0 100-16 8 8 0 000 16z" />
+        </svg>
+        <h3 class="mt-2 text-lg font-medium text-white">No channels found</h3>
+        <p class="mt-1 text-zinc-500">Try changing your search criteria.</p>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { setupAcestreamHandlers } from "@scripts/channelFilters.js";
+  import { loadFavorites, saveFavorites, isFavorite, addFavorite, removeFavorite } from "@scripts/favoritesManager.js";
+
+  // DOM elements
+  const channelSearch = document.getElementById('channel-search');
+  const channelCards = document.querySelectorAll('.channel-card');
+  const noResultsMessage = document.getElementById('no-results');
+  const qualityFilter = document.getElementById('quality-filter');
+  const sortBySelect = document.getElementById('sort-by');
+  const favoriteButtons = document.querySelectorAll('.favorite-btn');
+  
+  // Setup handlers for acestream links
+  setupAcestreamHandlers();
+  
+  // Initialize favorites
+  updateFavoriteButtons();
+  
+  // Filter and sort functions
+  function filterChannels() {
+    const searchTerm = channelSearch ? (channelSearch as HTMLInputElement).value.toLowerCase() : '';
+    const quality = qualityFilter ? (qualityFilter as HTMLSelectElement).value : '';
+    
+    let visibleCount = 0;
+    
+    channelCards.forEach(card => {
+      const name = card.getAttribute('data-name') || '';
+      const cardQuality = card.getAttribute('data-quality') || '';
+      
+      const matchesSearch = !searchTerm || name.includes(searchTerm);
+      const matchesQuality = !quality || cardQuality === quality;
+      
+      if (matchesSearch && matchesQuality) {
+        (card as HTMLElement).style.display = '';
+        visibleCount++;
+      } else {
+        (card as HTMLElement).style.display = 'none';
+      }
+    });
+    
+    // Show/hide no results message
+    if (noResultsMessage) {
+      if (visibleCount === 0) {
+        noResultsMessage.classList.remove('hidden');
+      } else {
+        noResultsMessage.classList.add('hidden');
+      }
+    }
+    
+    return visibleCount;
+  }
+  
+  function sortChannels() {
+    const container = document.getElementById('channels-grid');
+    if (!container) return;
+    
+    const sortBy = sortBySelect ? (sortBySelect as HTMLSelectElement).value : 'name';
+    const cards = Array.from(channelCards);
+    
+    cards.sort((a, b) => {
+      if (sortBy === 'quality') {
+        const qualityA = a.getAttribute('data-quality') || '';
+        const qualityB = b.getAttribute('data-quality') || '';
+        return qualityA.localeCompare(qualityB);
+      } else {
+        // Default sort by name
+        const nameA = a.getAttribute('data-name') || '';
+        const nameB = b.getAttribute('data-name') || '';
+        return nameA.localeCompare(nameB);
+      }
+    });
+    
+    // Reorder DOM elements
+    cards.forEach(card => {
+      container.appendChild(card);
+    });
+  }
+  
+  // Initialize favorites UI
+  function updateFavoriteButtons() {
+    const favorites = loadFavorites();
+    
+    favoriteButtons.forEach(btn => {
+      const channelId = btn.getAttribute('data-channel-id');
+      if (!channelId) return;
+      
+      const isFav = isFavorite(channelId);
+      
+      // Update button appearance based on favorite status
+      if (isFav) {
+        btn.classList.add('bg-red-900/30', 'border-red-500/30');
+        btn.classList.remove('bg-zinc-800', 'border-zinc-700');
+        
+        const svg = btn.querySelector('svg');
+        if (svg) {
+          svg.classList.add('text-red-400', 'fill-current');
+          svg.classList.remove('text-zinc-400');
+        }
+      }
+    });
+  }
+  
+  // Event handlers
+  if (channelSearch) {
+    channelSearch.addEventListener('input', filterChannels);
+  }
+  
+  if (qualityFilter) {
+    qualityFilter.addEventListener('change', filterChannels);
+  }
+  
+  if (sortBySelect) {
+    sortBySelect.addEventListener('change', () => {
+      sortChannels();
+    });
+  }
+  
+  // Toggle favorites
+  favoriteButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const channelId = btn.getAttribute('data-channel-id');
+      if (!channelId) return;
+      
+      const isFav = isFavorite(channelId);
+      
+      if (isFav) {
+        removeFavorite(channelId);
+        
+        // Update button appearance
+        btn.classList.remove('bg-red-900/30', 'border-red-500/30');
+        btn.classList.add('bg-zinc-800', 'border-zinc-700');
+        
+        const svg = btn.querySelector('svg');
+        if (svg) {
+          svg.classList.remove('text-red-400', 'fill-current');
+          svg.classList.add('text-zinc-400');
+        }
+      } else {
+        addFavorite(channelId);
+        
+        // Update button appearance
+        btn.classList.add('bg-red-900/30', 'border-red-500/30');
+        btn.classList.remove('bg-zinc-800', 'border-zinc-700');
+        
+        const svg = btn.querySelector('svg');
+        if (svg) {
+          svg.classList.add('text-red-400', 'fill-current');
+          svg.classList.remove('text-zinc-400');
+        }
+      }
+    });
+  });
+  
+  // Initial filter and sort
+  filterChannels();
+  sortChannels();
+</script>

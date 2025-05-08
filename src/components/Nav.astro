@@ -1,0 +1,224 @@
+---
+// Navigation component for TV channel listings
+interface Props {
+    title?: string;
+}
+import {
+    SignedIn,
+    SignedOut,
+    UserButton,
+    SignInButton,
+} from "@clerk/astro/components";
+
+const { title = "TV Channel Directory" } = Astro.props;
+
+// Get the current path to determine active nav item
+const currentPath = Astro.url.pathname;
+
+// Helper function to check if a path is active
+const isActive = (path: string) => {
+    if (path === "/" && currentPath === "/") return true;
+    if (path !== "/" && currentPath.startsWith(path)) return true;
+    return false;
+};
+
+// Define the nav items for easier management
+const navItems = [
+    { href: "/", label: "Home" },
+    { href: "/categories", label: "Categories" },
+    { href: "/favorites", label: "Favorites" },
+];
+---
+
+<nav
+    class="sticky top-0 z-50 w-full bg-black/80 backdrop-blur-sm border-b border-zinc-800"
+>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo and title -->
+            <div class="flex-shrink-0 flex items-center">
+                <svg
+                    class="h-8 w-8 text-red-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                >
+                    <path
+                        d="M4 5a2 2 0 012-2h12a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm2 0v14h12V5H6zm3 8.5a.5.5 0 01.5-.5h5a.5.5 0 010 1h-5a.5.5 0 01-.5-.5zm0-3a.5.5 0 01.5-.5h5a.5.5 0 010 1h-5a.5.5 0 01-.5-.5zm0 6a.5.5 0 01.5-.5h5a.5.5 0 010 1h-5a.5.5 0 01-.5-.5z"
+                    ></path>
+                </svg>
+                <h1 class="ml-3 text-xl font-semibold text-white">{title}</h1>
+            </div>
+
+            <!-- Desktop menu -->
+            <div class="hidden md:block">
+                <div class="flex space-x-4">
+                    {
+                        navItems.map((item) => (
+                            <a
+                                href={item.href}
+                                class={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                                    isActive(item.href)
+                                        ? "bg-red-600 text-white hover:bg-red-700"
+                                        : "text-white hover:bg-zinc-800"
+                                }`}
+                            >
+                                {item.label}
+                            </a>
+                        ))
+                    }
+                </div>
+            </div>
+
+            <!-- Search bar -->
+            <div class="hidden md:block flex-1 max-w-xs mx-4">
+                <div class="relative">
+                    <div
+                        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                    >
+                        <svg
+                            class="h-5 w-5 text-zinc-400"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <input
+                        type="search"
+                        id="channel-search"
+                        class="block w-full pl-10 pr-3 py-2 bg-zinc-800 border border-zinc-700 rounded-md leading-5 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                        placeholder="Search channels..."
+                    />
+                </div>
+            </div>
+
+            <!-- User profile/login -->
+            <div class="hidden md:block">
+                <div class="flex items-center">
+                    <SignedIn>
+                        <UserButton/>
+                    </SignedIn>
+                    <SignedOut>
+                        <SignInButton mode="modal" class="cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            <span class="text-sm text-white">Sign In</span>
+                        </SignInButton>
+                    </SignedOut>
+                </div>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center">
+                <button
+                    id="mobile-menu-button"
+                    type="button"
+                    class="inline-flex items-center justify-center p-2 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500"
+                    aria-expanded="false"
+                >
+                    <span class="sr-only">Open main menu</span>
+                    <!-- Menu icon -->
+                    <svg
+                        id="menu-icon"
+                        class="block h-6 w-6"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                    <!-- Close icon -->
+                    <svg
+                        id="close-icon"
+                        class="hidden h-6 w-6"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-zinc-800">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            {
+                navItems.map((item) => (
+                    <a
+                        href={item.href}
+                        class={`block px-3 py-2 rounded-md text-base font-medium ${
+                            isActive(item.href)
+                                ? "bg-red-600 text-white hover:bg-red-700"
+                                : "text-white hover:bg-zinc-800"
+                        }`}
+                    >
+                        {item.label}
+                    </a>
+                ))
+            }
+
+            <!-- Mobile search -->
+            <div class="px-2 mt-3">
+                <div class="relative">
+                    <div
+                        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                    >
+                        <svg
+                            class="h-5 w-5 text-zinc-400"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <input
+                        type="search"
+                        id="mobile-channel-search"
+                        class="block w-full pl-10 pr-3 py-2 bg-zinc-800 border border-zinc-700 rounded-md leading-5 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+                        placeholder="Search channels..."
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script>
+    // Toggle mobile menu
+    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const menuIcon = document.getElementById("menu-icon");
+    const closeIcon = document.getElementById("close-icon");
+
+    if (mobileMenuButton && mobileMenu && menuIcon && closeIcon) {
+        mobileMenuButton.addEventListener("click", () => {
+            mobileMenu.classList.toggle("hidden");
+            menuIcon.classList.toggle("hidden");
+            closeIcon.classList.toggle("hidden");
+        });
+    }
+</script>

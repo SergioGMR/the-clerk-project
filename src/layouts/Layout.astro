@@ -1,0 +1,25 @@
+---
+import "@styles/global.css";
+import Nav from "@components/Nav.astro";
+const {
+  title = "The Clerk Project",
+  description = "This is a description of The Clerk Project.",
+} = Astro.props;
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    </head
+>
+
+  <body class="min-h-screen bg-neutral-950 text-white font-sans antialiased">
+    <Nav />
+    <main class="container mx-auto px-4 py-8 max-w-7xl">
+      <slot />
+    </main>
+  </body>
+</html>
