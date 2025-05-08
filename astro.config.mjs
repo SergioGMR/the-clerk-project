@@ -1,9 +1,10 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node'
-import tailwindcss from '@tailwindcss/vite';
+import tailwindcss from '@tailwindcss/vite'
 
 import clerk from '@clerk/astro';
+
+import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,6 +13,11 @@ export default defineConfig({
   },
 
   integrations: [clerk()],
-  adapter: node({ mode: 'standalone' }),
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
+    imageService: true,
+  }),
   output: 'server',
 });
