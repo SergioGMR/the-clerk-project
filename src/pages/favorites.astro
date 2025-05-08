@@ -1,6 +1,10 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import { getChannels, getChannelUrl } from "@utils/channelScraper";
+import {
+    getChannelLogo,
+    getChannels,
+    getChannelUrl,
+} from "@utils/channelScraper";
 import { SignedIn } from "@clerk/astro/components";
 import { getUserFavorites } from "@utils/favoritesUtils";
 
@@ -11,7 +15,9 @@ const channels = await getChannels();
 const user = await Astro.locals.currentUser();
 const userFavorites = user ? await getUserFavorites(user.id) : [];
 // Filter channels to get only favorites
-const favoriteChannels = channels.filter((channel) => console.log(channel.id));
+const favoriteChannels = channels.filter((channel) =>
+    userFavorites.some((favorite) => favorite === channel.id),
+);
 
 // Check if we have favorites
 const hasFavorites = favoriteChannels.length > 0;
@@ -84,12 +90,20 @@ const clientDataJSON = JSON.stringify(clientData);
                                     <div class="p-4">
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 rounded bg-gradient-to-br from-zinc-700 to-zinc-800 flex items-center justify-center">
-                                                    <span class="text-white font-medium">
-                                                        {channel.name
-                                                            .substring(0, 2)
-                                                            .toUpperCase()}
-                                                    </span>
+                                                <div
+                                                    class="w-12 h-12 rounded-md flex items-center justify-center text-white font-bold text-xl"
+                                                    style={`background-color: ${getChannelLogo(channel.name, channel.url?.startsWith("acestream://") ? "acestream" : "url").backgroundColor};`}
+                                                >
+                                                    {
+                                                        getChannelLogo(
+                                                            channel.name,
+                                                            channel.url?.startsWith(
+                                                                "acestream://",
+                                                            )
+                                                                ? "acestream"
+                                                                : "url",
+                                                        ).initials
+                                                    }
                                                 </div>
                                                 <div>
                                                     <h3 class="text-white font-medium">
