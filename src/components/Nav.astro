@@ -25,7 +25,6 @@ const isActive = (path: string) => {
 // Define the nav items for easier management
 const navItems = [
     { href: "/", label: "Home" },
-    { href: "/channels", label: "Channels" },
     { href: "/favorites", label: "Favorites" },
 ];
 ---
@@ -70,39 +69,13 @@ const navItems = [
                 </div>
             </div>
 
-            <!-- Search bar -->
-            <div class="hidden md:block flex-1 max-w-xs mx-4">
-                <div class="relative">
-                    <div
-                        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                    >
-                        <svg
-                            class="h-5 w-5 text-zinc-400"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                            aria-hidden="true"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <input
-                        type="search"
-                        id="channel-search"
-                        class="block w-full pl-10 pr-3 py-2 bg-zinc-800 border border-zinc-700 rounded-md leading-5 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                        placeholder="Search channels..."
-                    />
-                </div>
-            </div>
-
             <!-- User profile/login -->
             <div class="hidden md:block">
                 <div class="flex items-center">
                     <SignedIn>
-                        <UserButton showName />
+                        <div class="w-52 flex justify-end">
+                            <UserButton showName />
+                        </div>
                     </SignedIn>
                     <SignedOut>
                         <SignInButton
@@ -178,34 +151,6 @@ const navItems = [
                     </a>
                 ))
             }
-
-            <!-- Mobile search -->
-            <div class="px-2 mt-3">
-                <div class="relative">
-                    <div
-                        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                    >
-                        <svg
-                            class="h-5 w-5 text-zinc-400"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                            aria-hidden="true"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <input
-                        type="search"
-                        id="mobile-channel-search"
-                        class="block w-full pl-10 pr-3 py-2 bg-zinc-800 border border-zinc-700 rounded-md leading-5 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
-                        placeholder="Search channels..."
-                    />
-                </div>
-            </div>
         </div>
     </div>
 </nav>

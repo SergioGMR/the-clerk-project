@@ -3,8 +3,8 @@
  * with JSON caching support
  */
 
-import fs from 'node:fs/promises';
 import { v4 as uuidv4 } from 'uuid';
+import fs from 'node:fs/promises';
 import path from 'node:path';
 import type { Channel, ChannelGroup, ChannelData, GroupChannel }
   from '../types/channel';
@@ -440,26 +440,19 @@ function processChannelInfo(nameText: string, groupTitle: string): {
  * @returns The URL for the channel (acestream protocol or direct url)
  */
 export function getChannelUrl(channel: Channel | GroupChannel): string {
-  if (channel.type === 'acestream') {
-    return `acestream://${channel.id}`;
-  } else {
-    return channel.url || '#';
-  }
+  return channel.url || '#';
 }
 
 /**
  * Generate a thumbnail/logo for a channel based on its name
  * @param name Channel name
  * @param type Channel type (optional)
- * @returns URL to a generated placeholder logo
+ * @returns Object with background color in hex format and initials
  */
-export function getChannelLogo(name: string, type?: 'acestream' | 'url'): string {
+export function getChannelLogo(name: string, type?: 'acestream' | 'url'): { backgroundColor: string, initials: string } {
   // Extract initials for the logo (up to 2 characters)
   const initials = name
-    .split(/\s+/)
-    .map(word => word[0])
     .slice(0, 2)
-    .join('')
     .toUpperCase();
 
   // Generate a consistent color based on the channel name
@@ -474,11 +467,35 @@ export function getChannelLogo(name: string, type?: 'acestream' | 'url'): string
     hue = (hue + 180) % 360;
   }
 
-  const backgroundColor = `hsl(${hue}, 70%, 40%)`;
-  const textColor = 'white';
+  // Convertir de HSL a Hexadecimal (con el #)
+  const hexColor = '#' + hslToHex(hue, 70, 40);
 
-  // Return a placeholder image URL with the channel's initials
-  return `https://placehold.co/64x64/${backgroundColor.replace('#', '')}/${textColor}?text=${initials}`;
+  return {
+    backgroundColor: hexColor,
+    initials: initials
+  };
+}
+
+/**
+ * Convierte un color de formato HSL a formato hexadecimal
+ * @param h Hue (0-360)
+ * @param s Saturation (0-100)
+ * @param l Lightness (0-100)
+ * @returns String con el color en formato hexadecimal (sin el #)
+ */
+function hslToHex(h: number, s: number, l: number): string {
+  // Convertir s y l a fracciones
+  s /= 100;
+  l /= 100;
+
+  const a = s * Math.min(l, 1 - l);
+  const f = (n: number) => {
+    const k = (n + h / 30) % 12;
+    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return Math.round(255 * color).toString(16).padStart(2, '0');
+  };
+
+  return `${f(0)}${f(8)}${f(4)}`;
 }
 
 /**

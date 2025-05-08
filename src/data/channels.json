@@ -1,8 +1,8 @@
 {
-    "lastUpdated": "2025-05-08T13:33:32.790Z",
+    "lastUpdated": "2025-05-08T14:01:57.417Z",
     "groups": [
         {
-            "id": "54a644dc-f436-412e-b1b9-b786e41db16d",
+            "id": "09c6585c-02e1-493d-91ba-d05782f57619",
             "name": "vamos",
             "displayName": "#Vamos",
             "tags": [
@@ -11,7 +11,7 @@
             "channels": [
                 {
                     "name": "#Vamos 1080p",
-                    "id": "54a644dc-f436-412e-b1b9-b786e41db16d",
+                    "id": "09c6585c-02e1-493d-91ba-d05782f57619",
                     "url": "https://tinyurl.com/28nyhk6y",
                     "quality": "1080p",
                     "category": "Entertainment",
@@ -22,7 +22,7 @@
                 },
                 {
                     "name": "#Vamos 720p",
-                    "id": "9b650747-35dd-406b-9c61-a404e7814374",
+                    "id": "66c5b8aa-5b0a-4bd6-90a0-33487570dcf1",
                     "url": "https://tinyurl.com/2dl4cxsu",
                     "quality": "720p",
                     "category": "Entertainment",
@@ -34,7 +34,7 @@
             ]
         },
         {
-            "id": "e02a3359-8c77-47b0-a5be-3bdfb1be2708",
+            "id": "2905e93b-e418-4259-9519-cf31e86bc32a",
             "name": "dazn-laliga",
             "displayName": "DAZN LaLiga",
             "tags": [
@@ -46,7 +46,7 @@
             "channels": [
                 {
                     "name": "DAZN LaLiga 1080p MultiAudio (1)",
-                    "id": "e02a3359-8c77-47b0-a5be-3bdfb1be2708",
+                    "id": "2905e93b-e418-4259-9519-cf31e86bc32a",
                     "url": "https://tinyurl.com/23uus674",
                     "quality": "1080p",
                     "category": "Sports",
@@ -60,7 +60,7 @@
                 },
                 {
                     "name": "DAZN LaLiga 1080p MultiAudio (2)",
-                    "id": "cabc34ac-c3e5-4a9b-a08f-c9df532f4dcc",
+                    "id": "3119b4c6-67d8-46d5-aaf5-ec02dc8d6593",
                     "url": "https://tinyurl.com/258mgsys",
                     "quality": "1080p",
                     "category": "Sports",
@@ -74,7 +74,7 @@
                 },
                 {
                     "name": "DAZN LaLiga 720p",
-                    "id": "5ef306bc-0a6d-447f-a0f8-9845a14ca33e",
+                    "id": "bde71f6b-7673-4234-a67f-59dbbb7a1f71",
                     "url": "https://tinyurl.com/2yfj2g5z",
                     "quality": "720p",
                     "category": "Sports",
@@ -88,7 +88,7 @@
                 },
                 {
                     "name": "DAZN LaLiga 2",
-                    "id": "8b94a3e9-5676-4914-81c6-06e5cff9fcce",
+                    "id": "aa76f92e-154f-40e5-893b-24a87d5d5bb8",
                     "url": "https://tinyurl.com/yrab8c6h",
                     "category": "Sports",
                     "groupTitle": "DAZN LaLiga",
@@ -101,7 +101,7 @@
                 },
                 {
                     "name": "DAZN LaLiga 2 1080p MultiAudio",
-                    "id": "9d3f03a1-a231-414e-b62b-aa848242b0d3",
+                    "id": "3462828f-6edb-4dc2-bc71-36cb322a10fe",
                     "url": "https://tinyurl.com/27ymjz45",
                     "quality": "1080p",
                     "category": "Sports",
@@ -115,7 +115,7 @@
                 },
                 {
                     "name": "DAZN LaLiga 2 720p MultiAudio",
-                    "id": "b99006e9-879b-4625-a78c-b91107dec863",
+                    "id": "c64d2140-949e-476a-94a0-c216570a2dca",
                     "url": "https://tinyurl.com/2xsvnmdn",
                     "quality": "720p",
                     "category": "Sports",
@@ -130,7 +130,7 @@
             ]
         },
         {
-            "id": "5c920a7c-00c1-460f-bf20-224d86ea5e74",
+            "id": "64bb3d64-ec67-41bb-b1a1-12ebeae37307",
             "name": "laliga",
             "displayName": "LaLiga",
             "tags": [
@@ -141,7 +141,7 @@
             "channels": [
                 {
                     "name": "La Liga Hypermotion 1 720p",
-                    "id": "5c920a7c-00c1-460f-bf20-224d86ea5e74",
+                    "id": "64bb3d64-ec67-41bb-b1a1-12ebeae37307",
                     "url": "https://tinyurl.com/24nz2uwt",
                     "quality": "720p",
                     "category": "Sports",
@@ -153,7 +153,7 @@
                 },
                 {
                     "name": "La Liga Hypermotion 2 1080p",
-                    "id": "4823e1fa-1e95-4df8-8537-c808c0c2ced0",
+                    "id": "2ab66f92-b398-407c-8002-6f4cc2a15504",
                     "url": "https://tinyurl.com/yu9e8lqf",
                     "quality": "1080p",
                     "category": "Sports",
@@ -165,7 +165,7 @@
                 },
                 {
                     "name": "La Liga Hypermotion 2 720p",
-                    "id": "0e27719b-a013-4808-8399-74fe61a620ce",
+                    "id": "f1f448e6-2c5e-4c41-bd4d-ae3ed4fc7e07",
                     "url": "https://tinyurl.com/272m5chp",
                     "quality": "720p",
                     "category": "Sports",
@@ -177,7 +177,7 @@
                 },
                 {
                     "name": "LaLiga Smartbank 1080p",
-                    "id": "09444d21-eb92-4114-9163-c9eff9a968c6",
+                    "id": "caea1dd5-d863-48e8-b622-e8587f40ce82",
                     "url": "https://tinyurl.com/2xk8772x",
                     "quality": "1080p",
                     "category": "Sports",
@@ -189,7 +189,7 @@
                 },
                 {
                     "name": "LaLiga Smartbank 720p",
-                    "id": "13485902-d6bc-4240-8cda-7cc86aef73ba",
+                    "id": "3c8e918b-2e31-49fe-aa45-5b4292bedfa0",
                     "url": "https://tinyurl.com/28bcnnt2",
                     "quality": "720p",
                     "category": "Sports",
@@ -201,7 +201,7 @@
                 },
                 {
                     "name": "LaLiga Smartbank 2 720p",
-                    "id": "31a161f6-5f44-44b7-8c9a-4eb43e6fddf4",
+                    "id": "a62484d8-c89e-4360-baa9-ea339bd46d88",
                     "url": "https://tinyurl.com/2at7wr7s",
                     "quality": "720p",
                     "category": "Sports",
@@ -213,7 +213,7 @@
                 },
                 {
                     "name": "LaLiga Smartbank 3",
-                    "id": "9e85c2c3-1984-4ab2-ba10-66be309878b1",
+                    "id": "2e3e40ac-d541-44f5-a92d-5e5fecd8bb91",
                     "url": "https://tinyurl.com/25wpjxo3",
                     "category": "Sports",
                     "groupTitle": "LaLiga",
@@ -224,7 +224,7 @@
                 },
                 {
                     "name": "LaLiga BAR 1080p",
-                    "id": "47c80b61-bc0c-40dd-8860-6e59f791b1fc",
+                    "id": "313e23c9-52ff-40cc-9826-487a6b0db2ec",
                     "url": "https://tinyurl.com/22o274v6",
                     "quality": "1080p",
                     "category": "Sports",
@@ -237,7 +237,7 @@
             ]
         },
         {
-            "id": "71100218-ef4a-420e-8ffc-eb05ecfb01a7",
+            "id": "adb57691-98a4-4ab5-92a6-3096e4da5ab0",
             "name": "m-laliga",
             "displayName": "M. LaLiga",
             "tags": [
@@ -249,7 +249,7 @@
             "channels": [
                 {
                     "name": "M. Liga Campeones 1 720p",
-                    "id": "71100218-ef4a-420e-8ffc-eb05ecfb01a7",
+                    "id": "adb57691-98a4-4ab5-92a6-3096e4da5ab0",
                     "url": "https://tinyurl.com/2cqb7oco",
                     "quality": "720p",
                     "category": "Sports",
@@ -262,7 +262,7 @@
                 },
                 {
                     "name": "M. Liga Campeones 3 HD",
-                    "id": "b83d628b-15ae-4697-bc23-99f081312036",
+                    "id": "fbabeba3-6350-4864-8d5b-6f835e97426a",
                     "url": "https://tinyurl.com/ysy2jhnr",
                     "quality": "HD",
                     "category": "Sports",
@@ -275,7 +275,7 @@
                 },
                 {
                     "name": "M. La Liga",
-                    "id": "da079560-965f-4bcf-8e0a-b243b15f9954",
+                    "id": "6c0c1a3a-3334-46f8-8470-25afa6188872",
                     "url": "https://tinyurl.com/2aylaqfl",
                     "category": "Sports",
                     "groupTitle": "M. LaLiga",
@@ -286,7 +286,7 @@
                 },
                 {
                     "name": "M. La Liga 1080p MultiAudio",
-                    "id": "5d9ca9b3-4692-4a9a-80aa-a5b526b0b807",
+                    "id": "07b4c064-1534-414d-9425-815647bd8ec2",
                     "url": "https://tinyurl.com/23vvqhpf",
                     "quality": "1080p",
                     "category": "Sports",
@@ -298,7 +298,7 @@
                 },
                 {
                     "name": "M. La Liga 3 1080p",
-                    "id": "8dc5316c-2585-46a1-aff4-08241aa75878",
+                    "id": "a97f17cc-17b2-49f0-8577-7280d681e4cd",
                     "url": "https://tinyurl.com/2yp4xml3",
                     "quality": "1080p",
                     "category": "Sports",
@@ -310,7 +310,7 @@
                 },
                 {
                     "name": "M. La Liga 4 1080p",
-                    "id": "47297828-e05a-4c91-9e5b-d96e5fa4ad19",
+                    "id": "4cac2ac8-4e98-4bd6-b8cf-b16c23061220",
                     "url": "https://tinyurl.com/26t5adzr",
                     "quality": "1080p",
                     "category": "Sports",
@@ -322,7 +322,7 @@
                 },
                 {
                     "name": "M. La Liga 6 1080p",
-                    "id": "35d156f7-8b76-4337-9fee-7b7c0fc15e90",
+                    "id": "6eee6010-4e70-4129-9761-23b895b004e7",
                     "url": "https://tinyurl.com/29uoe5pv",
                     "quality": "1080p",
                     "category": "Sports",
@@ -334,7 +334,7 @@
                 },
                 {
                     "name": "M. LaLiga BAR 720p",
-                    "id": "aa2fcb5f-7a1f-4efc-8bbb-69693268fb44",
+                    "id": "ee796ad2-8619-467e-abfb-fdf85ad6bf58",
                     "url": "https://tinyurl.com/2bqhf9ec",
                     "quality": "720p",
                     "category": "Sports",
@@ -346,7 +346,7 @@
                 },
                 {
                     "name": "M. Liga Campeones 3",
-                    "id": "2886cba8-b56c-45ca-bd97-6c7c91bfb5ae",
+                    "id": "c990f04e-f2e6-485d-8d63-10db7180bff5",
                     "url": "https://tinyurl.com/ylehawym",
                     "category": "Sports",
                     "groupTitle": "M. LaLiga",
@@ -358,7 +358,7 @@
                 },
                 {
                     "name": "M. Liga Campeones",
-                    "id": "0f6da439-b1dc-4ce7-b1b7-ba1ff08d5f9f",
+                    "id": "f4e92344-2292-4c3f-aaeb-44cd00171fbb",
                     "url": "https://tinyurl.com/2akahfgs",
                     "category": "Sports",
                     "groupTitle": "M. LaLiga",
@@ -370,7 +370,7 @@
                 },
                 {
                     "name": "M. Liga Campeones 6 1080p",
-                    "id": "e1dfd430-cbb9-4ca6-bb37-114020f3fb50",
+                    "id": "93c1149c-6816-45a6-a44b-e8082a285318",
                     "url": "https://tinyurl.com/yuywvbcc",
                     "quality": "1080p",
                     "category": "Sports",
@@ -384,7 +384,7 @@
             ]
         },
         {
-            "id": "c8f8d36b-d2b3-4a3d-9069-5cad64d222ca",
+            "id": "c8d65bec-6a03-4340-b80a-18edb2b9a4ab",
             "name": "movistar",
             "displayName": "Movistar",
             "tags": [
@@ -393,7 +393,7 @@
             "channels": [
                 {
                     "name": "M. Plus 1080p",
-                    "id": "c8f8d36b-d2b3-4a3d-9069-5cad64d222ca",
+                    "id": "c8d65bec-6a03-4340-b80a-18edb2b9a4ab",
                     "url": "https://tinyurl.com/2yd2h4u9",
                     "quality": "1080p",
                     "category": "Entertainment",
@@ -404,7 +404,7 @@
                 },
                 {
                     "name": "M. Deportes 720p",
-                    "id": "4d62c192-dec3-4d80-86f3-16aff1209334",
+                    "id": "c6da0e98-23e5-4a7b-a8bd-90d30b37ad34",
                     "url": "https://tinyurl.com/2y5ypzm4",
                     "quality": "720p",
                     "category": "Entertainment",
@@ -415,7 +415,7 @@
                 },
                 {
                     "name": "M. Deportes 2 1080p",
-                    "id": "2583becb-0d23-4ba8-89be-b11ccb905fb4",
+                    "id": "bd24462b-53ec-46eb-980e-d74d3b806d4e",
                     "url": "https://tinyurl.com/2y322z2g",
                     "quality": "1080p",
                     "category": "Entertainment",
@@ -426,7 +426,7 @@
                 },
                 {
                     "name": "M. Deportes 3 1080p",
-                    "id": "0efecc64-9668-49cf-a3d7-e50f4adde5e4",
+                    "id": "065279c8-15b0-4b31-aefd-8cf8d14117a2",
                     "url": "https://tinyurl.com/222ehmqp",
                     "quality": "1080p",
                     "category": "Entertainment",
@@ -437,7 +437,7 @@
                 },
                 {
                     "name": "M. Deportes 4 1080p",
-                    "id": "d478a300-066f-4c71-b53c-ed7370875d18",
+                    "id": "27b4fc07-9f0e-4661-a5a2-1c4cb4d0cf52",
                     "url": "https://tinyurl.com/2blnfvkj",
                     "quality": "1080p",
                     "category": "Entertainment",
@@ -448,7 +448,7 @@
                 },
                 {
                     "name": "M. Deportes 5 1080p",
-                    "id": "e7848856-a00d-450b-997f-2865a10c5766",
+                    "id": "9bfa9f40-307e-41c4-95e8-2e5dd97054c9",
                     "url": "https://tinyurl.com/24hd4mqm",
                     "quality": "1080p",
                     "category": "Entertainment",
@@ -459,7 +459,7 @@
                 },
                 {
                     "name": "M. Deportes 6 1080p",
-                    "id": "599db354-3735-49e9-b026-82daf94dfb7a",
+                    "id": "1249a201-42d0-48ec-bc29-ee67e76b137f",
                     "url": "https://tinyurl.com/28mjy4uo",
                     "quality": "1080p",
                     "category": "Entertainment",
@@ -470,7 +470,7 @@
                 },
                 {
                     "name": "M. Deportes 7 1080p",
-                    "id": "1640331a-939f-40ac-b32b-01cb373d12f9",
+                    "id": "251542c6-d34a-4e10-9acc-bd964f5fed9f",
                     "url": "https://tinyurl.com/24zdjeog",
                     "quality": "1080p",
                     "category": "Entertainment",
@@ -482,7 +482,7 @@
             ]
         },
         {
-            "id": "d14c4acd-c7fe-44b9-985f-e39d9bf2aa97",
+            "id": "6db08bbc-215d-41fb-a5ea-215bb804a4ba",
             "name": "nba",
             "displayName": "NBA",
             "tags": [
@@ -493,7 +493,7 @@
             "channels": [
                 {
                     "name": "NBA TV",
-                    "id": "d14c4acd-c7fe-44b9-985f-e39d9bf2aa97",
+                    "id": "6db08bbc-215d-41fb-a5ea-215bb804a4ba",
                     "url": "https://tinyurl.com/27bz7pco",
                     "category": "Sports",
                     "groupTitle": "NBA",
@@ -505,7 +505,7 @@
             ]
         },
         {
-            "id": "1faeb77e-83c3-4521-9ad3-0e1cb14fb35e",
+            "id": "ad936ebd-01ba-4f68-8eb0-e8c8da18c587",
             "name": "ufc",
             "displayName": "UFC",
             "tags": [
@@ -517,7 +517,7 @@
             "channels": [
                 {
                     "name": "UFC (1)",
-                    "id": "1faeb77e-83c3-4521-9ad3-0e1cb14fb35e",
+                    "id": "ad936ebd-01ba-4f68-8eb0-e8c8da18c587",
                     "url": "https://tinyurl.com/ytf8mwpo",
                     "category": "Sports",
                     "groupTitle": "UFC",
@@ -529,7 +529,7 @@
                 },
                 {
                     "name": "UFC (2)",
-                    "id": "5ba553ee-925a-4099-9371-ac3ecfdd8248",
+                    "id": "26febd9b-04b6-465b-8857-2c9a9febc32d",
                     "url": "https://tinyurl.com/23nsbqst",
                     "category": "Sports",
                     "groupTitle": "UFC",
@@ -542,7 +542,7 @@
             ]
         },
         {
-            "id": "ab81e588-c9c2-463b-ab8e-30b21e4b6246",
+            "id": "547c0e47-b18e-4c3d-b0bd-5df7a76494bc",
             "name": "otros",
             "displayName": "Otros",
             "tags": [
@@ -551,7 +551,7 @@
             "channels": [
                 {
                     "name": "Bein Sport Extra ES",
-                    "id": "ab81e588-c9c2-463b-ab8e-30b21e4b6246",
+                    "id": "547c0e47-b18e-4c3d-b0bd-5df7a76494bc",
                     "url": "https://tinyurl.com/yth56t2h",
                     "category": "Entertainment",
                     "groupTitle": "Otros",
@@ -561,7 +561,7 @@
                 },
                 {
                     "name": "Digi Sport 2 HD",
-                    "id": "ab609953-a2b7-4341-986b-57ca6b990054",
+                    "id": "75c0a3a5-659e-4980-a2ed-035398ecfedd",
                     "url": "https://tinyurl.com/27k8hg9n",
                     "quality": "HD",
                     "category": "Entertainment",
@@ -572,7 +572,7 @@
                 },
                 {
                     "name": "ESPN Premium ES",
-                    "id": "7822c551-b8dd-4731-a6bf-a50528403813",
+                    "id": "32362b34-b180-4719-bb37-75a3e1b21965",
                     "url": "https://tinyurl.com/yn4yvry4",
                     "category": "Entertainment",
                     "groupTitle": "Otros",
@@ -584,7 +584,7 @@
                 },
                 {
                     "name": "Fast Sports",
-                    "id": "7887e0a7-f253-4cb4-851b-bb93bf197768",
+                    "id": "0a2320ef-adf7-46a1-898e-dfe6ba9fefd3",
                     "url": "https://tinyurl.com/yobjohac",
                     "category": "Entertainment",
                     "groupTitle": "Otros",
@@ -594,7 +594,7 @@
                 },
                 {
                     "name": "Fight Box",
-                    "id": "7e487659-8a90-4185-a14f-9a67af24a69c",
+                    "id": "0676fceb-e7b3-4868-adba-96aa443d4414",
                     "url": "https://tinyurl.com/2yzq94k6",
                     "category": "Entertainment",
                     "groupTitle": "Otros",
@@ -604,7 +604,7 @@
                 },
                 {
                     "name": "NBA TV",
-                    "id": "ddbf4075-2d8c-4977-a1f1-5cc3631c3e97",
+                    "id": "087481d9-1f76-4ed5-a88a-e9b3cb117d0a",
                     "url": "https://tinyurl.com/27bz7pco",
                     "category": "Entertainment",
                     "groupTitle": "Otros",
@@ -614,7 +614,7 @@
                 },
                 {
                     "name": "Nova Sport 1 HD",
-                    "id": "fcc2f4e8-1cff-49ec-8554-b1fdc76db3f0",
+                    "id": "6ec3c76b-ad24-4ec6-bbac-341ac08546ee",
                     "url": "https://tinyurl.com/25u7g7ro",
                     "quality": "HD",
                     "category": "Entertainment",
@@ -625,7 +625,7 @@
                 },
                 {
                     "name": "Nova Sport 2 HD",
-                    "id": "c5e180e3-488a-4101-9536-41c6800b1e49",
+                    "id": "86235853-b677-4e05-b512-eaa795513e92",
                     "url": "https://tinyurl.com/2cvv8tfm",
                     "quality": "HD",
                     "category": "Entertainment",
@@ -636,7 +636,7 @@
                 },
                 {
                     "name": "OneGolf",
-                    "id": "795503e9-9072-4606-a8ba-19c401991fbd",
+                    "id": "278095d1-c2d3-4a14-83ae-13b8b94dff8e",
                     "url": "https://tinyurl.com/2cq3neqc",
                     "category": "Sports",
                     "groupTitle": "Otros",
@@ -647,7 +647,7 @@
                 },
                 {
                     "name": "Premier Sport 1 UK",
-                    "id": "5c7d22d7-c324-48ad-a4e0-c7ebce769354",
+                    "id": "b8668cc5-0432-4574-9e74-286aeebb8c0b",
                     "url": "https://tinyurl.com/2gujadbb",
                     "category": "Entertainment",
                     "groupTitle": "Otros",
@@ -657,7 +657,7 @@
                 },
                 {
                     "name": "Premier Sport 2 UK",
-                    "id": "ede3fedc-1193-4099-8f43-a474e04b3d85",
+                    "id": "5ea8e9ff-2c55-4241-9e02-64d6c5984f85",
                     "url": "https://tinyurl.com/2xhpdfss",
                     "category": "Entertainment",
                     "groupTitle": "Otros",
@@ -667,7 +667,7 @@
                 },
                 {
                     "name": "Sky Bundersliga 1 DE",
-                    "id": "dd5e02bd-387d-4083-813b-a4f8e8c00570",
+                    "id": "94e465e3-656a-46b0-93ad-76d8adbbd6dd",
                     "url": "https://tinyurl.com/25m333hv",
                     "category": "Entertainment",
                     "groupTitle": "Otros",
@@ -677,7 +677,7 @@
                 },
                 {
                     "name": "Hustler HD ESP",
-                    "id": "f1c2c538-fc36-4d0c-a738-7bae5575899a",
+                    "id": "58c67d90-d7a6-4d52-9b02-e56e4023cded",
                     "url": "https://tinyurl.com/28rwz28l",
                     "quality": "HD",
                     "category": "Entertainment",
@@ -688,7 +688,7 @@
                 },
                 {
                     "name": "Sky Sports Arena UK",
-                    "id": "2f905760-5501-40a6-9a5e-9049bfc80381",
+                    "id": "6c1b2df5-30d1-4b6f-9897-b5223e80c910",
                     "url": "https://tinyurl.com/23nypdep",
                     "category": "Entertainment",
                     "groupTitle": "Otros",
@@ -698,7 +698,7 @@
                 },
                 {
                     "name": "Sky Sports Football UK",
-                    "id": "78e346c3-78bf-4825-b048-42c0a3e7984a",
+                    "id": "3ac28889-f8e1-4085-9fdc-88d72b9309ee",
                     "url": "https://tinyurl.com/2m2mv5sx",
                     "category": "Entertainment",
                     "groupTitle": "Otros",
@@ -708,7 +708,7 @@
                 },
                 {
                     "name": "Sport1 HD",
-                    "id": "315e8b63-e0c2-4a4c-95d9-8e1019b4530a",
+                    "id": "88f62825-e917-4b24-ba70-b638fc443abe",
                     "url": "https://tinyurl.com/25dhp4g4",
                     "quality": "HD",
                     "category": "Entertainment",
@@ -720,7 +720,7 @@
             ]
         },
         {
-            "id": "85797cb8-d5b4-402a-9a84-a5411840cb1d",
+            "id": "8719c056-07b7-4f0c-aba6-0f26554c7249",
             "name": "tdt",
             "displayName": "TDT",
             "tags": [
@@ -731,7 +731,7 @@
             "channels": [
                 {
                     "name": "24h ES",
-                    "id": "85797cb8-d5b4-402a-9a84-a5411840cb1d",
+                    "id": "8719c056-07b7-4f0c-aba6-0f26554c7249",
                     "url": "https://tinyurl.com/272k8ocb",
                     "category": "Entertainment",
                     "groupTitle": "TDT",
@@ -741,7 +741,7 @@
                 },
                 {
                     "name": "EuroSport 1 1080p (1)",
-                    "id": "95651e01-13db-4ce9-9644-8237976acead",
+                    "id": "59b16484-7bc0-4401-8542-cd30cd4ec96e",
                     "url": "https://tinyurl.com/27d2gy4y",
                     "quality": "1080p",
                     "category": "Entertainment",
@@ -754,7 +754,7 @@
                 },
                 {
                     "name": "EuroSport 1 1080p (2)",
-                    "id": "5e60d74a-aea9-4b1e-bc70-40e58c64ea43",
+                    "id": "072404d1-2223-42c8-8f28-170ef5b357c9",
                     "url": "https://tinyurl.com/2jc8z4tg",
                     "quality": "1080p",
                     "category": "Entertainment",
@@ -767,7 +767,7 @@
                 },
                 {
                     "name": "EuroSport 1 HD (1)",
-                    "id": "c815e43d-07b4-40df-a92b-10066438d5f4",
+                    "id": "699a34c4-3793-4790-8257-9a1ad1ddc6da",
                     "url": "https://tinyurl.com/29m5t6b2",
                     "quality": "HD",
                     "category": "Entertainment",
@@ -780,7 +780,7 @@
                 },
                 {
                     "name": "EuroSport 1 HD (2)",
-                    "id": "b9feff48-332c-447b-9ff5-b788692ff64a",
+                    "id": "5e64a892-b0ae-4330-92be-81f8fcd8ca92",
                     "url": "https://tinyurl.com/22nt5wp4",
                     "quality": "HD",
                     "category": "Entertainment",
@@ -793,7 +793,7 @@
                 },
                 {
                     "name": "EuroSport 2 1080P (1)",
-                    "id": "809b0465-cb79-489c-8720-1c2b1d416e08",
+                    "id": "7baf3bc0-9e9b-433f-ba24-320440446728",
                     "url": "https://tinyurl.com/22x78akt",
                     "quality": "1080P",
                     "category": "Entertainment",
@@ -806,7 +806,7 @@
                 },
                 {
                     "name": "EuroSport 2 1080P (2)",
-                    "id": "4e741dc7-a5fa-4b91-bbac-fad867ac9f25",
+                    "id": "50607414-41ce-4824-88dd-5991cadf5a66",
                     "url": "https://tinyurl.com/2lghpgbw",
                     "quality": "1080P",
                     "category": "Entertainment",
@@ -819,7 +819,7 @@
                 },
                 {
                     "name": "EuroSport 3 1080P",
-                    "id": "a990d5ad-376e-4b25-97a6-be9a97907737",
+                    "id": "2b63bf72-cb04-4a4b-84c5-c9d5925a6d4b",
                     "url": "https://tinyurl.com/2dbtosut",
                     "quality": "1080P",
                     "category": "Entertainment",
@@ -832,7 +832,7 @@
                 },
                 {
                     "name": "EuroSport 4 1080P",
-                    "id": "832013c8-ae8a-41ad-a0f1-17125f7e615b",
+                    "id": "98260217-ceae-46d9-99af-153e7f9de88a",
                     "url": "https://tinyurl.com/2a2rkxbu",
                     "quality": "1080P",
                     "category": "Entertainment",
@@ -845,7 +845,7 @@
                 },
                 {
                     "name": "EuroSport 5 1080P",
-                    "id": "ff2bb491-b841-44e7-ac26-28ba1ff98237",
+                    "id": "11009205-6b4d-4bc6-bbe2-04cae7f5edab",
                     "url": "https://tinyurl.com/2ygnd8gn",
                     "quality": "1080P",
                     "category": "Entertainment",
@@ -858,7 +858,7 @@
                 },
                 {
                     "name": "EuroSport 6 1080P",
-                    "id": "600f9092-964f-43c7-be3a-701917feb0e2",
+                    "id": "926fbd2d-952d-41c8-a072-e1248cace6af",
                     "url": "https://tinyurl.com/2cb9azkk",
                     "quality": "1080P",
                     "category": "Entertainment",
@@ -871,7 +871,7 @@
                 },
                 {
                     "name": "La 1",
-                    "id": "1afbb0c7-d04a-4836-9c19-a056eede977a",
+                    "id": "1ad06e2c-2f2f-47e6-aded-f65b3f137c4f",
                     "url": "https://tinyurl.com/29wxbb9x",
                     "category": "Entertainment",
                     "groupTitle": "TDT",
@@ -881,7 +881,7 @@
                 },
                 {
                     "name": "La 2 (1)",
-                    "id": "dc6de131-32ef-44ea-837c-1e9544eda8a8",
+                    "id": "c2a4bbed-4571-4bfd-9430-ec787b473a02",
                     "url": "https://tinyurl.com/283znevj",
                     "category": "Entertainment",
                     "groupTitle": "TDT",
@@ -891,7 +891,7 @@
                 },
                 {
                     "name": "La 2 (2)",
-                    "id": "c7a68dc8-0c26-4a43-a273-c0a029049c34",
+                    "id": "711c7204-7ae8-4020-aef5-efa866c09c98",
                     "url": "https://tinyurl.com/ynqgu47h",
                     "category": "Entertainment",
                     "groupTitle": "TDT",
@@ -901,7 +901,7 @@
                 },
                 {
                     "name": "RealMadrid TV (1)",
-                    "id": "f36142a6-5878-4b24-b787-4466af2b4838",
+                    "id": "d82ebccc-9bac-4c3e-8d46-1f9ea15170ac",
                     "url": "https://tinyurl.com/27569s89",
                     "category": "Entertainment",
                     "groupTitle": "TDT",
@@ -911,7 +911,7 @@
                 },
                 {
                     "name": "RealMadrid TV (2)",
-                    "id": "d7da7893-5b3b-4879-b4c4-3691a2b84954",
+                    "id": "5d2b4f3c-ac6f-4c13-852d-0fcf740ae734",
                     "url": "https://tinyurl.com/2d4njued",
                     "category": "Entertainment",
                     "groupTitle": "TDT",
