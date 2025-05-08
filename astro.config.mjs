@@ -1,10 +1,9 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite'
-
-import clerk from '@clerk/astro';
-
 import vercel from '@astrojs/vercel';
+import { dark } from '@clerk/themes'
+import clerk from '@clerk/astro';
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,7 +11,13 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
 
-  integrations: [clerk()],
+  integrations: [clerk(
+    {
+      appearance: {
+        baseTheme: dark,
+      },
+    }
+  )],
   adapter: vercel({
     webAnalytics: {
       enabled: true,

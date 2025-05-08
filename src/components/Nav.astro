@@ -10,7 +10,7 @@ import {
     SignInButton,
 } from "@clerk/astro/components";
 
-const { title = "TV Channel Directory" } = Astro.props;
+const { title = "Teddy Bear" } = Astro.props;
 
 // Get the current path to determine active nav item
 const currentPath = Astro.url.pathname;
@@ -25,7 +25,7 @@ const isActive = (path: string) => {
 // Define the nav items for easier management
 const navItems = [
     { href: "/", label: "Home" },
-    { href: "/categories", label: "Categories" },
+    { href: "/groups", label: "Groups" },
     { href: "/favorites", label: "Favorites" },
 ];
 ---
@@ -102,10 +102,13 @@ const navItems = [
             <div class="hidden md:block">
                 <div class="flex items-center">
                     <SignedIn>
-                        <UserButton/>
+                        <UserButton showName />
                     </SignedIn>
                     <SignedOut>
-                        <SignInButton mode="modal" class="cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        <SignInButton
+                            mode="modal"
+                            class="cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                        >
                             <span class="text-sm text-white">Sign In</span>
                         </SignInButton>
                     </SignedOut>
