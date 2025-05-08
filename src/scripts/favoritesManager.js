@@ -1,15 +1,26 @@
 /**
- * Favorites management utility for client-side favorites handling
+ * Favorites management utility for server-side favorites handling
  */
 
 /**
- * Load favorites from localStorage
- * @returns {string[]} Array of favorite channel IDs
+ * Load favorites from the server
+ * @returns {Promise<string[]>} Promise resolving to array of favorite channel IDs
  */
-export function loadFavorites() {
+export async function loadFavorites() {
     try {
-        const storedFavorites = localStorage.getItem("favoriteChannels");
-        return storedFavorites ? JSON.parse(storedFavorites) : [];
+        const response = await fetch('/api/favorites');
+
+        if (response.status === 401) {
+            // Usuario no autenticado
+            return [];
+        }
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.success ? data.favorites : [];
     } catch (error) {
         console.error("Error loading favorites:", error);
         return [];
@@ -17,32 +28,35 @@ export function loadFavorites() {
 }
 
 /**
- * Save favorites to localStorage
- * @param {string[]} favorites Array of favorite channel IDs
- */
-export function saveFavorites(favorites) {
-    try {
-        localStorage.setItem("favoriteChannels", JSON.stringify(favorites));
-        return true;
-    } catch (error) {
-        console.error("Error saving favorites:", error);
-        return false;
-    }
-}
-
-/**
  * Add a channel to favorites
  * @param {string} channelId Channel ID to add to favorites
- * @returns {boolean} Success status
+ * @returns {Promise<boolean>} Promise resolving to success status
  */
-export function addFavorite(channelId) {
+export async function addFavorite(channelId) {
     try {
-        const favorites = loadFavorites();
-        if (!favorites.includes(channelId)) {
-            favorites.push(channelId);
-            saveFavorites(favorites);
+        const response = await fetch('/api/favorites', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                channelId,
+                action: 'add'
+            })
+        });
+
+        if (response.status === 401) {
+            // Si no está autenticado, mostrar mensaje
+            alert("Debes iniciar sesión para guardar favoritos");
+            return false;
         }
-        return true;
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.success;
     } catch (error) {
         console.error("Error adding favorite:", error);
         return false;
@@ -52,14 +66,27 @@ export function addFavorite(channelId) {
 /**
  * Remove a channel from favorites
  * @param {string} channelId Channel ID to remove from favorites
- * @returns {boolean} Success status
+ * @returns {Promise<boolean>} Promise resolving to success status
  */
-export function removeFavorite(channelId) {
+export async function removeFavorite(channelId) {
     try {
-        const favorites = loadFavorites();
-        const updatedFavorites = favorites.filter(id => id !== channelId);
-        saveFavorites(updatedFavorites);
-        return true;
+        const response = await fetch('/api/favorites', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                channelId,
+                action: 'remove'
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.success;
     } catch (error) {
         console.error("Error removing favorite:", error);
         return false;
@@ -69,10 +96,10 @@ export function removeFavorite(channelId) {
 /**
  * Check if a channel is in favorites
  * @param {string} channelId Channel ID to check
- * @returns {boolean} True if the channel is in favorites
+ * @returns {Promise<boolean>} Promise resolving to true if the channel is in favorites
  */
-export function isFavorite(channelId) {
-    const favorites = loadFavorites();
+export async function isFavorite(channelId) {
+    const favorites = await loadFavorites();
     return favorites.includes(channelId);
 }
 

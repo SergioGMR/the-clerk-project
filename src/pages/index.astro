@@ -139,7 +139,7 @@ const user = Astro.locals.currentUser();
                     {
                         groups.map((group) => (
                             <a
-                                href={`/groups/${group.name}`}
+                                href={`/channels/${group.name}`}
                                 data-name={group.name}
                                 data-display-name={group.displayName}
                                 data-tags={group.tags?.join(",")}

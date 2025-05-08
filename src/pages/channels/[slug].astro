@@ -191,7 +191,7 @@ const qualityTypes = [...new Set(
 
 <script>
   import { setupAcestreamHandlers } from "@scripts/channelFilters.js";
-  import { loadFavorites, saveFavorites, isFavorite, addFavorite, removeFavorite } from "@scripts/favoritesManager.js";
+  import { loadFavorites, addFavorite, removeFavorite, isFavorite } from "@scripts/favoritesManager.js";
 
   // DOM elements
   const channelSearch = document.getElementById('channel-search');
@@ -205,7 +205,7 @@ const qualityTypes = [...new Set(
   setupAcestreamHandlers();
   
   // Initialize favorites
-  updateFavoriteButtons();
+  initializeFavorites();
   
   // Filter and sort functions
   function filterChannels() {
@@ -268,27 +268,49 @@ const qualityTypes = [...new Set(
   }
   
   // Initialize favorites UI
-  function updateFavoriteButtons() {
-    const favorites = loadFavorites();
-    
-    favoriteButtons.forEach(btn => {
-      const channelId = btn.getAttribute('data-channel-id');
-      if (!channelId) return;
+  async function initializeFavorites() {
+    try {
+      // Cargar favoritos de forma asíncrona
+      const favorites = await loadFavorites();
       
-      const isFav = isFavorite(channelId);
-      
-      // Update button appearance based on favorite status
-      if (isFav) {
-        btn.classList.add('bg-red-900/30', 'border-red-500/30');
-        btn.classList.remove('bg-zinc-800', 'border-zinc-700');
+      // Actualizar la UI para cada botón
+      favoriteButtons.forEach(btn => {
+        const channelId = btn.getAttribute('data-channel-id');
+        if (!channelId) return;
         
-        const svg = btn.querySelector('svg');
-        if (svg) {
-          svg.classList.add('text-red-400', 'fill-current');
-          svg.classList.remove('text-zinc-400');
-        }
+        const isFav = favorites.includes(channelId);
+        updateFavoriteButtonUI(btn, isFav);
+      });
+    } catch (error) {
+      console.error("Error initializing favorites:", error);
+    }
+  }
+  
+  // Actualizar la apariencia del botón según estado de favorito
+  function updateFavoriteButtonUI(btn: Element, isFavorited: boolean) {
+    if (isFavorited) {
+      btn.classList.add('bg-red-900/30', 'border-red-500/30');
+      btn.classList.remove('bg-zinc-800', 'border-zinc-700');
+      
+      const svg = btn.querySelector('svg');
+      if (svg) {
+        svg.classList.add('text-red-400', 'fill-current');
+        svg.classList.remove('text-zinc-400');
       }
-    });
+      
+      btn.setAttribute('title', 'Remove from favorites');
+    } else {
+      btn.classList.remove('bg-red-900/30', 'border-red-500/30');
+      btn.classList.add('bg-zinc-800', 'border-zinc-700');
+      
+      const svg = btn.querySelector('svg');
+      if (svg) {
+        svg.classList.remove('text-red-400', 'fill-current');
+        svg.classList.add('text-zinc-400');
+      }
+      
+      btn.setAttribute('title', 'Add to favorites');
+    }
   }
   
   // Event handlers
@@ -308,36 +330,36 @@ const qualityTypes = [...new Set(
   
   // Toggle favorites
   favoriteButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       const channelId = btn.getAttribute('data-channel-id');
       if (!channelId) return;
       
-      const isFav = isFavorite(channelId);
+      // Determinar si ya está en favoritos
+      const favorites = await loadFavorites();
+      const isFav = favorites.includes(channelId);
       
-      if (isFav) {
-        removeFavorite(channelId);
+      try {
+        let success;
         
-        // Update button appearance
-        btn.classList.remove('bg-red-900/30', 'border-red-500/30');
-        btn.classList.add('bg-zinc-800', 'border-zinc-700');
-        
-        const svg = btn.querySelector('svg');
-        if (svg) {
-          svg.classList.remove('text-red-400', 'fill-current');
-          svg.classList.add('text-zinc-400');
+        if (isFav) {
+          // Eliminar de favoritos
+          success = await removeFavorite(channelId);
+          if (success) {
+            updateFavoriteButtonUI(btn, false);
+          }
+        } else {
+          // Añadir a favoritos
+          success = await addFavorite(channelId);
+          if (success) {
+            updateFavoriteButtonUI(btn, true);
+          }
         }
-      } else {
-        addFavorite(channelId);
         
-        // Update button appearance
-        btn.classList.add('bg-red-900/30', 'border-red-500/30');
-        btn.classList.remove('bg-zinc-800', 'border-zinc-700');
-        
-        const svg = btn.querySelector('svg');
-        if (svg) {
-          svg.classList.add('text-red-400', 'fill-current');
-          svg.classList.remove('text-zinc-400');
+        if (!success) {
+          console.error("Failed to update favorites");
         }
+      } catch (error) {
+        console.error("Error updating favorites:", error);
       }
     });
   });
