@@ -12,6 +12,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# data favorites
+data/favorites/
+data/favorites/**/*
 
 # environment variables
 .env

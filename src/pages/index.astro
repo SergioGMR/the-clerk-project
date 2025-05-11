@@ -1,15 +1,11 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import {
-    getChannelData,
-    extractAllTags,
-} from "@utils/channelDataProvider";
+import { getChannelData, extractAllTags } from "@utils/channelDataProvider";
 
-// Get channel data from the data provider utility
 const { groups, channels, formattedDate } = await getChannelData();
-
-// Extract all unique tags across all groups
 const allTags = extractAllTags(groups);
+
+const user = Astro.locals.currentUser();
 ---
 
 <Layout title="Channel Groups | Directory">
@@ -143,7 +139,7 @@ const allTags = extractAllTags(groups);
                     {
                         groups.map((group) => (
                             <a
-                                href={`/group/${group.name}`}
+                                href={`/channels/${group.name}`}
                                 data-name={group.name}
                                 data-display-name={group.displayName}
                                 data-tags={group.tags?.join(",")}
@@ -288,7 +284,9 @@ const allTags = extractAllTags(groups);
     // Event: Search input
     if (groupSearch) {
         groupSearch.addEventListener("input", () => {
-            currentSearchTerm = (groupSearch as HTMLInputElement).value.toLowerCase().trim();
+            currentSearchTerm = (groupSearch as HTMLInputElement).value
+                .toLowerCase()
+                .trim();
             filterGroups(
                 allGroups,
                 currentSearchTerm,
@@ -302,7 +300,9 @@ const allTags = extractAllTags(groups);
     // Event: Tag search
     if (tagSearch) {
         tagSearch.addEventListener("input", () => {
-            const searchTerm = (tagSearch as HTMLInputElement).value.toLowerCase().trim();
+            const searchTerm = (tagSearch as HTMLInputElement).value
+                .toLowerCase()
+                .trim();
             filterTags(tagItems, searchTerm);
         });
     }
