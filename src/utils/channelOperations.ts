@@ -2,7 +2,7 @@
  * Utility functions for common channel and group operations
  */
 
-import type { Channel, ChannelGroup, ChannelFilter } from "../types/channel";
+import type { Channel, ChannelGroup, ChannelFilter } from "@/types/channel";
 
 /**
  * Filter channels based on multiple criteria

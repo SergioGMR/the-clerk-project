@@ -8,7 +8,16 @@ import clerk from '@clerk/astro';
 // https://astro.build/config
 export default defineConfig({
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    resolve: {
+      alias: {
+        '@': '/src',
+        '@types': '/src/types',
+        '@components': '/src/components',
+        '@layouts': '/src/layouts',
+        '@data': '/src/data'
+      }
+    }
   },
 
   integrations: [clerk()],

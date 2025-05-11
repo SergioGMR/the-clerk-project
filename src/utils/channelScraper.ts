@@ -5,7 +5,7 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import type { Channel, ChannelGroup, ChannelData } from '../types/channel';
+import type { Channel, ChannelGroup, ChannelData } from '@/types/channel';
 
 // Path to the JSON cache file
 const CACHE_FILE_PATH = path.resolve('./src/data/channels.json');

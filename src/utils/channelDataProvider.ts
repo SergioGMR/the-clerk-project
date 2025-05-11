@@ -6,7 +6,7 @@
 import { getChannels } from "./channelScraper";
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { Channel, ChannelGroup, ChannelDataResponse } from "../types/channel";
+import type { Channel, ChannelGroup, ChannelDataResponse } from "@/types/channel";
 
 const CACHE_FILE_PATH = path.resolve("./src/data/channels.json");
 
