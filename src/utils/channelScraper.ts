@@ -6,7 +6,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import type { Channel, ChannelGroup, ChannelData } from '@/types/channel';
+import type { Channel, ChannelGroup, ChannelData, GroupChannel } from '@/types/channel';
 
 // Path to the JSON cache file
 const CACHE_FILE_PATH = path.resolve('./src/data/channels.json');
@@ -64,26 +64,43 @@ export async function getChannels(forceRefresh = false): Promise<Channel[]> {
  */
 async function loadChannelsFromCache(): Promise<ChannelData | null> {
   try {
-    const fileData = await fs.readFile(CACHE_FILE_PATH, 'utf-8');
-    const cacheData: ChannelData = JSON.parse(fileData);
+    // Intento de lectura optimizado con verificación de existencia
+    try {
+      const fileData = await fs.readFile(CACHE_FILE_PATH, 'utf-8');
+      const cacheData = JSON.parse(fileData) as ChannelData;
 
-    // Check if cache is fresh enough
-    if (cacheData.lastUpdated) {
-      const cacheTime = new Date(cacheData.lastUpdated).getTime();
-      const now = new Date().getTime();
-
-      if (now - cacheTime > CACHE_EXPIRATION) {
-        console.log('Cache expired, needs refresh');
+      // Validar la estructura básica del cache para evitar errores
+      if (!cacheData || !Array.isArray(cacheData.groups)) {
+        console.warn('Cache file exists but has invalid structure');
         return null;
       }
-    } else {
-      // No timestamp, consider cache invalid
+
+      // Check if cache is fresh enough
+      if (cacheData.lastUpdated) {
+        // Optimización: calcular la diferencia directamente
+        const expired = new Date().getTime() - new Date(cacheData.lastUpdated).getTime() > CACHE_EXPIRATION;
+
+        if (expired) {
+          console.log('Cache expired, needs refresh');
+          return null;
+        }
+      } else {
+        console.log('Cache has no timestamp, needs refresh');
+        return null;
+      }
+
+      return cacheData;
+    } catch (readError) {
+      // Comprobar si el error es de tipo 'archivo no encontrado'
+      if (typeof readError === 'object' && readError !== null && 'code' in readError && readError.code === 'ENOENT') {
+        console.log('Cache file does not exist, needs creation');
+      } else {
+        console.error('Error reading cache file:', readError);
+      }
       return null;
     }
-
-    return cacheData;
   } catch (error) {
-    console.error('Error loading from cache:', error);
+    console.error('Unexpected error loading cache:', error);
     return null;
   }
 }
@@ -135,8 +152,8 @@ function organizeChannelsIntoGroups(channels: Channel[]): ChannelGroup[] {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
 
-    // Usar el primer ID de canal como base para el ID del grupo
-    const groupId = channelsList.length > 0 ? channelsList[0].id : generateRandomId();
+    // Usar el primer ID de canal como base para el ID del grupo, o generar uno aleatorio
+    const groupId = channelsList.length > 0 ? channelsList[0].id : Math.random().toString(36).substring(2, 15);
 
     groups.push({
       id: groupId,
@@ -156,13 +173,6 @@ function organizeChannelsIntoGroups(channels: Channel[]): ChannelGroup[] {
   });
 
   return groups;
-}
-
-/**
- * Genera un ID aleatorio para grupos sin canales (caso extremo)
- */
-function generateRandomId(): string {
-  return Math.random().toString(36).substring(2, 15);
 }
 
 /**
@@ -203,24 +213,27 @@ function determineGroupTags(channels: Channel[]): string[] {
 }
 
 /**
- * Obtiene el elemento más común en un array
+ * Obtiene el elemento más común en un array - Versión optimizada con Map
  */
 function getMostCommonItem<T>(items: T[]): T {
-  const counts = items.reduce((acc, item) => {
-    acc[String(item)] = (acc[String(item)] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+  // Usar Map para mejor rendimiento con objetos como claves
+  const counts = new Map<T, number>();
 
+  // Contar ocurrencias de cada item
+  for (const item of items) {
+    counts.set(item, (counts.get(item) || 0) + 1);
+  }
+
+  // Encontrar el item con mayor número de ocurrencias
   let maxItem: T = items[0];
   let maxCount = 0;
 
-  for (const [item, count] of Object.entries(counts)) {
+  counts.forEach((count, item) => {
     if (count > maxCount) {
       maxCount = count;
-      // Convertir de nuevo al tipo original (aproximado)
-      maxItem = items.find(i => String(i) === item) || items[0];
+      maxItem = item;
     }
-  }
+  });
 
   return maxItem;
 }
@@ -345,47 +358,29 @@ function processChannelInfo(nameText: string, groupTitle: string): {
     quality = qualityMatch[0];
   }
 
+  // Mapa de reglas para categorías y etiquetas basadas en el título del grupo
+  const categoryRules = [
+    { pattern: /fútbol|futbol|soccer|liga|champions|football/i, category: 'Sports', tags: ['Football', 'Soccer'] },
+    { pattern: /ufc|fight|lucha|boxeo|boxing/i, category: 'Sports', tags: ['UFC', 'MMA', 'Fighting'] },
+    { pattern: /baloncesto|basket|nba/i, category: 'Sports', tags: ['Basketball', 'NBA'] },
+    { pattern: /deportes|sports/i, category: 'Sports', tags: ['Sports'] },
+    { pattern: /películas|peliculas|movie|cine/i, category: 'Movies', tags: ['Movies'] },
+    { pattern: /series|shows/i, category: 'Entertainment', tags: ['TV Shows', 'Series'] },
+    { pattern: /documentales|documentary|documental/i, category: 'Documentary', tags: ['Documentary'] },
+    { pattern: /noticias|news/i, category: 'News', tags: ['News'] },
+    { pattern: /infantil|kids|niños/i, category: 'Kids', tags: ['Kids'] }
+  ];
+
   // Usar el título del grupo para determinar categoría y etiquetas
   const groupLower = groupTitle.toLowerCase();
 
-  // Categorías basadas en el título del grupo
-  if (/fútbol|futbol|soccer|liga|champions|football/i.test(groupLower)) {
-    category = 'Sports';
-    tags.push('Football', 'Soccer');
-  }
-  else if (/ufc|fight|lucha|boxeo|boxing/i.test(groupLower)) {
-    category = 'Sports';
-    tags.push('UFC', 'MMA', 'Fighting');
-  }
-  else if (/baloncesto|basket|nba/i.test(groupLower)) {
-    category = 'Sports';
-    tags.push('Basketball', 'NBA');
-  }
-  else if (/deportes|sports/i.test(groupLower)) {
-    category = 'Sports';
-    tags.push('Sports');
-  }
-  else if (/películas|peliculas|movie|cine/i.test(groupLower)) {
-    category = 'Movies';
-    tags.push('Movies');
-  }
-  else if (/series|shows/i.test(groupLower)) {
-    category = 'Entertainment';
-    tags.push('TV Shows', 'Series');
-  }
-  else if (/documentales|documentary|documental/i.test(groupLower)) {
-    category = 'Documentary';
-    tags.push('Documentary');
-  }
-  else if (/noticias|news/i.test(groupLower)) {
-    category = 'News';
-    tags.push('News');
-  }
-  else if (/infantil|kids|niños/i.test(groupLower)) {
-    category = 'Kids';
-    tags.push('Kids');
-  }
-  else {
+  // Buscar la primera regla que coincida
+  const matchedRule = categoryRules.find(rule => rule.pattern.test(groupLower));
+
+  if (matchedRule) {
+    category = matchedRule.category;
+    tags.push(...matchedRule.tags);
+  } else {
     category = 'Entertainment';
     tags.push('Entertainment');
   }
@@ -393,39 +388,48 @@ function processChannelInfo(nameText: string, groupTitle: string): {
   // Utilizar también el nombre del canal para añadir etiquetas más específicas
   const nameLower = name.toLowerCase();
 
-  // Canales de deportes populares
-  if (/dazn/i.test(nameLower)) {
-    tags.push('DAZN', 'Sports');
-  }
-  if (/espn/i.test(nameLower)) {
-    tags.push('ESPN', 'Sports');
-  }
-  if (/eurosport/i.test(nameLower)) {
-    tags.push('Eurosport', 'Sports');
-  }
-  if (/movistar\s*\+?/i.test(nameLower)) {
-    tags.push('Movistar+');
-  }
-  if (/liga\s*campeones|champions/i.test(nameLower)) {
-    tags.push('Champions League', 'Football');
-    category = 'Sports';
-  }
-  if (/formula\s*1|f1/i.test(nameLower)) {
-    tags.push('Formula 1', 'Racing');
-    category = 'Sports';
-  }
-  if (/tenis|tennis/i.test(nameLower)) {
-    tags.push('Tennis');
-    category = 'Sports';
-  }
-  if (/golf/i.test(nameLower)) {
-    tags.push('Golf');
-    category = 'Sports';
-  }
-  if (/ufc|mma/i.test(nameLower)) {
-    tags.push('UFC', 'MMA');
-    category = 'Sports';
-  }
+  // Definir reglas para etiquetas basadas en el nombre del canal
+  const nameRules = [
+    { pattern: /dazn/i, tags: ['DAZN', 'Sports'] },
+    { pattern: /espn/i, tags: ['ESPN', 'Sports'] },
+    { pattern: /eurosport/i, tags: ['Eurosport', 'Sports'] },
+    { pattern: /movistar\s*\+?/i, tags: ['Movistar+'] },
+    {
+      pattern: /liga\s*campeones|champions/i,
+      tags: ['Champions League', 'Football'],
+      category: 'Sports'
+    },
+    {
+      pattern: /formula\s*1|f1/i,
+      tags: ['Formula 1', 'Racing'],
+      category: 'Sports'
+    },
+    {
+      pattern: /tenis|tennis/i,
+      tags: ['Tennis'],
+      category: 'Sports'
+    },
+    {
+      pattern: /golf/i,
+      tags: ['Golf'],
+      category: 'Sports'
+    },
+    {
+      pattern: /ufc|mma/i,
+      tags: ['UFC', 'MMA'],
+      category: 'Sports'
+    }
+  ];
+
+  // Aplicar todas las reglas que coincidan (pueden ser varias)
+  nameRules.forEach(rule => {
+    if (rule.pattern.test(nameLower)) {
+      tags.push(...rule.tags);
+      if (rule.category) {
+        category = rule.category;
+      }
+    }
+  });
 
   // Eliminar duplicados de tags
   tags = [...new Set(tags)];
@@ -450,51 +454,37 @@ export function getChannelUrl(channel: Channel | GroupChannel): string {
  */
 export function getChannelLogo(name: string, type?: 'acestream' | 'url'): { backgroundColor: string, initials: string } {
   // Extract initials for the logo (up to 2 characters)
-  const initials = name
-    .slice(0, 2)
-    .toUpperCase();
+  const initials = name.slice(0, 2).toUpperCase();
 
-  // Generate a consistent color based on the channel name
-  const hash = name.split('').reduce((acc, char) => {
-    return char.charCodeAt(0) + ((acc << 5) - acc);
-  }, 0);
+  // Algoritmo de hash optimizado (djb2)
+  let hash = 5381;
+  const len = name.length;
+
+  for (let i = 0; i < len; i++) {
+    hash = ((hash << 5) + hash) + name.charCodeAt(i);
+  }
 
   // Use different color ranges for acestream vs url channels
   let hue = Math.abs(hash) % 360;
   if (type === 'url') {
-    // Use more blue-ish colors for URL-based channels
     hue = (hue + 180) % 360;
   }
 
-  // Convertir de HSL a Hexadecimal (con el #)
-  const hexColor = '#' + hslToHex(hue, 70, 40);
-
-  return {
-    backgroundColor: hexColor,
-    initials: initials
-  };
-}
-
-/**
- * Convierte un color de formato HSL a formato hexadecimal
- * @param h Hue (0-360)
- * @param s Saturation (0-100)
- * @param l Lightness (0-100)
- * @returns String con el color en formato hexadecimal (sin el #)
- */
-function hslToHex(h: number, s: number, l: number): string {
-  // Convertir s y l a fracciones
-  s /= 100;
-  l /= 100;
-
+  // Optimized HSL to Hex conversion with cached calculations
+  const s = 0.7; // 70/100
+  const l = 0.4; // 40/100
   const a = s * Math.min(l, 1 - l);
+
+  // Pre-calcular valores comunes
   const f = (n: number) => {
-    const k = (n + h / 30) % 12;
+    const k = (n + hue / 30) % 12;
     const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
     return Math.round(255 * color).toString(16).padStart(2, '0');
   };
 
-  return `${f(0)}${f(8)}${f(4)}`;
+  const hexColor = `#${f(0)}${f(8)}${f(4)}`;
+
+  return { backgroundColor: hexColor, initials };
 }
 
 /**

@@ -2,13 +2,20 @@
  * Favorites management utility for server-side favorites handling
  */
 
+// Configuración común para solicitudes fetch
+const fetchConfig = {
+    headers: {
+        'Content-Type': 'application/json'
+    }
+};
+
 /**
  * Load favorites from the server
  * @returns {Promise<string[]>} Promise resolving to array of favorite channel IDs
  */
 export async function loadFavorites() {
     try {
-        const response = await fetch('/api/favorites');
+        const response = await fetch('/api/favorites', fetchConfig);
 
         if (response.status === 401) {
             // Usuario no autenticado
@@ -20,7 +27,7 @@ export async function loadFavorites() {
         }
 
         const data = await response.json();
-        return data.success ? data.favorites : [];
+        return data.success && Array.isArray(data.favorites) ? data.favorites : [];
     } catch (error) {
         console.error("Error loading favorites:", error);
         return [];
@@ -35,10 +42,8 @@ export async function loadFavorites() {
 export async function addFavorite(channelId) {
     try {
         const response = await fetch('/api/favorites', {
+            ...fetchConfig,
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
             body: JSON.stringify({
                 channelId,
                 action: 'add'
@@ -56,7 +61,7 @@ export async function addFavorite(channelId) {
         }
 
         const data = await response.json();
-        return data.success;
+        return !!data.success;
     } catch (error) {
         console.error("Error adding favorite:", error);
         return false;
@@ -71,10 +76,8 @@ export async function addFavorite(channelId) {
 export async function removeFavorite(channelId) {
     try {
         const response = await fetch('/api/favorites', {
+            ...fetchConfig,
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
             body: JSON.stringify({
                 channelId,
                 action: 'remove'
@@ -86,7 +89,7 @@ export async function removeFavorite(channelId) {
         }
 
         const data = await response.json();
-        return data.success;
+        return !!data.success;
     } catch (error) {
         console.error("Error removing favorite:", error);
         return false;
@@ -110,14 +113,15 @@ export async function isFavorite(channelId) {
  * @returns {string} CSS color string (hsl format)
  */
 export function generateChannelColor(name, type) {
-    const hash = name.split('').reduce((acc, char) => {
-        return char.charCodeAt(0) + ((acc << 5) - acc);
-    }, 0);
+    // Más eficiente calcular el hash en un solo paso
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
 
     // Use different color ranges for acestream vs url channels
     let hue = Math.abs(hash) % 360;
     if (type === 'url') {
-        // Use more blue-ish colors for URL-based channels
         hue = (hue + 180) % 360;
     }
 

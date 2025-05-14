@@ -11,36 +11,48 @@ import type { Channel, ChannelGroup, ChannelFilter } from "@/types/channel";
  * @returns Filtered list of channels
  */
 export function filterChannels(channels: Channel[], filter: ChannelFilter): Channel[] {
+  // Optimización: si no hay filtros, devolver la lista completa
+  if (!filter.searchTerm &&
+    (!filter.tags || filter.tags.length === 0) &&
+    (!filter.categories || filter.categories.length === 0) &&
+    !filter.quality &&
+    !filter.type) {
+    return channels;
+  }
+
+  // Preparar searchTerm una sola vez si existe
+  const searchTermLower = filter.searchTerm?.toLowerCase();
+
   return channels.filter(channel => {
     // Filter by search term (name)
-    if (filter.searchTerm && !channel.name.toLowerCase().includes(filter.searchTerm.toLowerCase())) {
+    if (searchTermLower && !channel.name.toLowerCase().includes(searchTermLower)) {
       return false;
     }
-    
+
     // Filter by tags
     if (filter.tags && filter.tags.length > 0) {
       if (!channel.tags || !filter.tags.some(tag => channel.tags!.includes(tag))) {
         return false;
       }
     }
-    
+
     // Filter by categories
     if (filter.categories && filter.categories.length > 0) {
       if (!channel.category || !filter.categories.includes(channel.category)) {
         return false;
       }
     }
-    
+
     // Filter by quality
     if (filter.quality && channel.quality !== filter.quality) {
       return false;
     }
-    
+
     // Filter by type
     if (filter.type && channel.type !== filter.type) {
       return false;
     }
-    
+
     return true;
   });
 }
@@ -52,19 +64,27 @@ export function filterChannels(channels: Channel[], filter: ChannelFilter): Chan
  * @returns Filtered list of groups
  */
 export function filterGroups(groups: ChannelGroup[], filter: ChannelFilter): ChannelGroup[] {
+  // Optimización: si no hay filtros relevantes para grupos, devolver la lista completa
+  if (!filter.searchTerm && (!filter.tags || filter.tags.length === 0)) {
+    return groups;
+  }
+
+  // Preparar searchTerm una sola vez si existe
+  const searchTermLower = filter.searchTerm?.toLowerCase();
+
   return groups.filter(group => {
     // Filter by search term (name)
-    if (filter.searchTerm && !group.displayName.toLowerCase().includes(filter.searchTerm.toLowerCase())) {
+    if (searchTermLower && !group.displayName.toLowerCase().includes(searchTermLower)) {
       return false;
     }
-    
+
     // Filter by tags
     if (filter.tags && filter.tags.length > 0) {
       if (!group.tags || !filter.tags.some(tag => group.tags.includes(tag))) {
         return false;
       }
     }
-    
+
     return true;
   });
 }
@@ -97,14 +117,14 @@ export function getChannelById(channels: Channel[], channelId: string): Channel 
  * @returns Sorted list of channels
  */
 export function sortChannels(
-  channels: Channel[], 
+  channels: Channel[],
   sortBy: 'name' | 'quality' | 'category' = 'name',
   sortOrder: 'asc' | 'desc' = 'asc'
 ): Channel[] {
   return [...channels].sort((a, b) => {
     let valueA: string;
     let valueB: string;
-    
+
     switch (sortBy) {
       case 'quality':
         valueA = a.quality || '';
@@ -119,10 +139,10 @@ export function sortChannels(
         valueA = a.name;
         valueB = b.name;
     }
-    
+
     // Compare values (case-insensitive)
     const comparison = valueA.toLowerCase().localeCompare(valueB.toLowerCase());
-    
+
     // Apply sort order
     return sortOrder === 'asc' ? comparison : -comparison;
   });
@@ -139,17 +159,17 @@ export function groupChannelsBy(
   groupBy: 'category' | 'quality' | 'groupTitle'
 ): Record<string, Channel[]> {
   const result: Record<string, Channel[]> = {};
-  
+
   channels.forEach(channel => {
     const key = channel[groupBy] || 'Unknown';
-    
+
     if (!result[key]) {
       result[key] = [];
     }
-    
+
     result[key].push(channel);
   });
-  
+
   return result;
 }
 
@@ -166,7 +186,7 @@ export function getUniqueValues<K extends keyof Channel>(
   const values = channels
     .map(channel => channel[property])
     .filter(value => value != null);
-    
+
   return [...new Set(values)] as Array<NonNullable<Channel[K]>>;
 }
 
@@ -177,11 +197,11 @@ export function getUniqueValues<K extends keyof Channel>(
  */
 export function countChannelsByCategory(channels: Channel[]): Record<string, number> {
   const counts: Record<string, number> = {};
-  
+
   channels.forEach(channel => {
     const category = channel.category || 'Unknown';
     counts[category] = (counts[category] || 0) + 1;
   });
-  
+
   return counts;
 }

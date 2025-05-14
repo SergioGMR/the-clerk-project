@@ -23,7 +23,8 @@ export async function getUserFavorites(userId: string): Promise<string[]> {
     try {
         const filePath = getUserFavoritesPath(userId);
         const data = await fs.readFile(filePath, "utf-8");
-        return JSON.parse(data);
+        const parsedData = JSON.parse(data);
+        return Array.isArray(parsedData) ? parsedData : [];
     } catch (error) {
         // Si no existe el archivo o hay error, devolver array vacío
         return [];

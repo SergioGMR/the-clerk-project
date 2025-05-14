@@ -15,28 +15,39 @@
 export function filterGroups(groupElements, searchTerm, selectedTags, countElement, noResultsElement) {
     let visibleCount = 0;
 
-    groupElements.forEach((group) => {
-        const groupName = group.dataset.displayName.toLowerCase();
-        const groupTags = group.dataset.tags
-            ? group.dataset.tags.split(",")
-            : [];
+    // Optimización: verificar si se necesita filtrado
+    const needsFiltering = searchTerm || selectedTags.length > 0;
 
-        // Check if all filter criteria match
-        const searchMatch = !searchTerm || groupName.includes(searchTerm);
-
-        // Check if any selected tag is present in group tags
-        let tagsMatch = true;
-        if (selectedTags.length > 0) {
-            tagsMatch = selectedTags.some((tag) => groupTags.includes(tag));
-        }
-
-        if (searchMatch && tagsMatch) {
+    if (!needsFiltering) {
+        // Si no hay filtros, simplemente mostrar todos
+        groupElements.forEach((group) => {
             group.classList.remove("hidden");
             visibleCount++;
-        } else {
-            group.classList.add("hidden");
-        }
-    });
+        });
+    } else {
+        // Aplicar filtrado
+        const searchTermLower = searchTerm ? searchTerm.toLowerCase() : "";
+
+        groupElements.forEach((group) => {
+            const groupName = group.dataset.displayName.toLowerCase();
+            const groupTags = group.dataset.tags ? group.dataset.tags.split(",") : [];
+
+            // Optimización: verificar primero el filtro más discriminatorio
+            const searchMatch = !searchTerm || groupName.includes(searchTermLower);
+
+            let tagsMatch = true;
+            if (selectedTags.length > 0) {
+                tagsMatch = selectedTags.some((tag) => groupTags.includes(tag));
+            }
+
+            if (searchMatch && tagsMatch) {
+                group.classList.remove("hidden");
+                visibleCount++;
+            } else {
+                group.classList.add("hidden");
+            }
+        });
+    }
 
     // Update the count and show/hide no results message
     if (countElement) {
@@ -61,11 +72,18 @@ export function filterGroups(groupElements, searchTerm, selectedTags, countEleme
  * @param {string} searchTerm Search term to filter by
  */
 export function filterTags(tagItems, searchTerm) {
+    // Si no hay término de búsqueda, mostramos todos sin recorrer cada uno
+    if (!searchTerm) {
+        tagItems.forEach((item) => item.classList.remove("hidden"));
+        return;
+    }
+
+    // Preparar una sola vez el término de búsqueda
+    const searchTermLower = searchTerm.toLowerCase();
+
     tagItems.forEach((item) => {
-        const tagText = item
-            .querySelector("span")
-            .textContent.toLowerCase();
-        if (!searchTerm || tagText.includes(searchTerm)) {
+        const tagText = item.querySelector("span").textContent.toLowerCase();
+        if (tagText.includes(searchTermLower)) {
             item.classList.remove("hidden");
         } else {
             item.classList.add("hidden");
@@ -78,21 +96,24 @@ export function filterTags(tagItems, searchTerm) {
  * Handles special case for mobile devices
  */
 export function setupAcestreamHandlers() {
-    document.querySelectorAll('a[href^="acestream://"]').forEach((link) => {
-        link.addEventListener("click", (e) => {
-            // Only for devices that might not support acestream protocol
-            if (navigator.userAgent.match(/Android|iPhone|iPad|iPod|Mobile/i)) {
+    // Detectar solo una vez si es un dispositivo móvil
+    const isMobileDevice = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+    // Solo añadir listeners si es un dispositivo móvil
+    if (isMobileDevice) {
+        document.querySelectorAll('a[href^="acestream://"]').forEach((link) => {
+            link.addEventListener("click", (e) => {
                 e.preventDefault();
                 const text = link.href;
 
                 try {
-                    navigator.clipboard.writeText(text).then(() => {
-                        alert("Acestream link copied to clipboard!");
-                    });
+                    navigator.clipboard.writeText(text)
+                        .then(() => alert("Acestream link copied to clipboard!"))
+                        .catch(() => prompt("Copy this Acestream link:", text));
                 } catch (err) {
                     prompt("Copy this Acestream link:", text);
                 }
-            }
+            });
         });
-    });
+    }
 }

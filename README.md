@@ -6,12 +6,12 @@ Directorio de canales Acestream con autenticación de usuarios mediante Clerk. P
 
 ## 🌟 Características
 
-- 📋 Catálogo completo de canales organizados por grupos
+- 📋 Catálogo completo de canales Acestream organizados por grupos
 - 🔍 Filtrado avanzado por etiquetas, calidad y término de búsqueda
 - 💾 Sistema de favoritos para usuarios registrados
 - 🔄 Actualización automática de información de canales
-- 🔐 Autenticación de usuarios mediante Clerk
-- 📱 Diseño responsive para dispositivos móviles y escritorio
+- 🔐 Autenticación segura de usuarios mediante Clerk
+- 📱 Diseño responsive optimizado para dispositivos móviles y escritorio
 
 ## 📸 Capturas de Pantalla
 
@@ -32,6 +32,7 @@ Este proyecto utiliza [Clerk](https://clerk.dev/) para gestionar la autenticaci�
 - **Protección de rutas**: Las páginas que requieren autenticación, como `/favorites`, están protegidas mediante middleware.
 - **Almacenamiento de preferencias**: Los favoritos de cada usuario se asocian con su ID único de Clerk.
 - **Experiencia de usuario personalizada**: La interfaz muestra contenido personalizado cuando el usuario está autenticado.
+- **Modal de autenticación**: Experiencia de login mejorada usando modales en lugar de redirecciones completas.
 
 ### Implementación del Middleware
 
@@ -46,8 +47,15 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 export const onRequest = clerkMiddleware((auth, context) => {
+  // Redireccionar a nuestra página personalizada que abrirá el modal
   if (!auth().userId && isProtectedRoute(context.request)) {
-    return auth().redirectToSignIn();
+    const currentUrl = context.request.url;
+    const authRedirectUrl = new URL('/auth-redirect', currentUrl);
+    
+    // Pasar la URL actual como parámetro para redireccionar después de iniciar sesión
+    authRedirectUrl.searchParams.set('redirect_url', currentUrl);
+    
+    return Response.redirect(authRedirectUrl.toString(), 302);
   }
 });
 ```
@@ -77,11 +85,11 @@ export const GET: APIRoute = async ({ locals }) => {
 
 ## 🛠️ Tecnologías Utilizadas
 
-- [Astro](https://astro.build) - Framework web de alto rendimiento
-- [Clerk](https://clerk.dev) - Autenticación de usuarios
-- [Tailwind CSS](https://tailwindcss.com) - Framework CSS para el diseño
-- [TypeScript](https://www.typescriptlang.org/) - Lenguaje principal del proyecto
-- [Vercel](https://vercel.com) - Plataforma de despliegue
+- [Astro](https://astro.build) - Framework web de alto rendimiento para sitios estáticos y dinámicos
+- [Clerk](https://clerk.dev) - Autenticación de usuarios moderna y segura
+- [Tailwind CSS](https://tailwindcss.com) - Framework CSS para diseño rápido y responsivo
+- [TypeScript](https://www.typescriptlang.org/) - Lenguaje principal del proyecto para tipado estático
+- [Vercel](https://vercel.com) - Plataforma de despliegue para aplicaciones web
 
 ## 🚀 Configuración del Proyecto
 
@@ -95,7 +103,7 @@ export const GET: APIRoute = async ({ locals }) => {
 
 1. Clona este repositorio:
    ```bash
-   git clone https://github.com/tuusuario/the-clerk-project.git
+   git clone https://github.com/sergiogmr/the-clerk-project.git
    cd the-clerk-project
    ```
 
@@ -151,16 +159,33 @@ src/
     └── favoritesUtils.ts
 ```
 
+## 🔧 Optimizaciones
+
+El proyecto ha sido optimizado para:
+
+- **Rendimiento**: Carga rápida con optimización de recursos y caché.
+- **SEO**: Metadatos completos y estructura semántica.
+- **Accesibilidad**: Diseño inclusivo con contraste adecuado.
+- **Experiencia de usuario**: Interfaz intuitiva y responsive.
+- **Código limpio**: Estructura modular y funciones reutilizables.
+
+## 📊 Estadísticas
+
+- **Fecha última actualización**: 14 de mayo de 2025
+- **Versión actual**: 0.0.1
+- **Estado**: En desarrollo activo
+
 ## 📝 Licencia
 
 Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
 
 ## 👨‍💻 Autor
 
-- Tu Nombre - [GitHub](https://github.com/tuusuario)
+- Sergio G. - [GitHub](https://github.com/sergiogmr)
 
 ## 🙏 Agradecimientos
 
 - [Astro](https://astro.build) por proporcionar un excelente framework
 - [Clerk](https://clerk.dev) por su sistema de autenticación
 - [Tailwind CSS](https://tailwindcss.com) por facilitar el diseño
+- [Acestream](https://acestream.org/) por la tecnología base para la transmisión

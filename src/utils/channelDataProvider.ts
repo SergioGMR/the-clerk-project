@@ -17,10 +17,14 @@ const CACHE_FILE_PATH = path.resolve("./src/data/channels.json");
 export async function getChannelData(): Promise<ChannelDataResponse> {
   let groups: ChannelGroup[] = [];
   let channels: Channel[] = [];
-  let formattedDate = new Intl.DateTimeFormat("es-ES", {
+
+  // Crear formateador una sola vez para reutilizarlo
+  const dateFormatter = new Intl.DateTimeFormat("es-ES", {
     dateStyle: "medium",
     timeStyle: "short",
-  }).format(new Date());
+  });
+
+  let formattedDate = dateFormatter.format(new Date());
 
   try {
     // Try to read from cache file
@@ -31,13 +35,10 @@ export async function getChannelData(): Promise<ChannelDataResponse> {
       groups = cacheData.groups;
       // Also get flat list of channels for count display
       channels = await getChannels();
-      
+
       // Get formatted date from cache timestamp
       if (cacheData.lastUpdated) {
-        formattedDate = new Intl.DateTimeFormat("es-ES", {
-          dateStyle: "medium",
-          timeStyle: "short",
-        }).format(new Date(cacheData.lastUpdated));
+        formattedDate = dateFormatter.format(new Date(cacheData.lastUpdated));
       }
     } else {
       // Fallback to flat channel list if groups not available
@@ -64,17 +65,4 @@ export function extractAllTags(groups: ChannelGroup[]): string[] {
     .sort();
 }
 
-/**
- * Get all unique categories from channels
- * @param channels Channel list
- * @returns Array of unique categories
- */
-export function extractCategories(channels: Channel[]): string[] {
-  return [
-    ...new Set(
-      channels
-        .map((channel) => channel.category)
-        .filter((category): category is string => typeof category === "string")
-    ),
-  ];
-}
+// Se eliminó la función extractCategories porque no se utilizaba

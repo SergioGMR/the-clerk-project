@@ -24,7 +24,7 @@ const user = Astro.locals.currentUser();
                         >{formattedDate}</span
                     >
                 </p>
-                <form action="/api/refresh-channels" method="post" class="ml-3">
+                <!-- <form action="/api/refresh-channels" method="post" class="ml-3">
                     <button
                         type="submit"
                         id="refresh-channels-btn"
@@ -47,7 +47,7 @@ const user = Astro.locals.currentUser();
                         </svg>
                         Refresh
                     </button>
-                </form>
+                </form> -->
             </div>
         </div>
 
@@ -355,51 +355,51 @@ const user = Astro.locals.currentUser();
         });
     }
 
-    // Refresh button handling
-    const refreshButton = document.getElementById("refresh-channels-btn");
-    if (refreshButton) {
-        refreshButton.addEventListener("click", async (e) => {
-            e.preventDefault();
+    // // Refresh button handling
+    // const refreshButton = document.getElementById("refresh-channels-btn");
+    // if (refreshButton) {
+    //     refreshButton.addEventListener("click", async (e) => {
+    //         e.preventDefault();
 
-            // Show loading indicator
-            const loadingIndicator =
-                document.getElementById("loading-indicator");
-            if (loadingIndicator) {
-                loadingIndicator.classList.remove("hidden");
-            }
+    //         // Show loading indicator
+    //         const loadingIndicator =
+    //             document.getElementById("loading-indicator");
+    //         if (loadingIndicator) {
+    //             loadingIndicator.classList.remove("hidden");
+    //         }
 
-            try {
-                // Call the refresh API endpoint
-                const response = await fetch("/api/refresh-channels", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
+    //         try {
+    //             // Call the refresh API endpoint
+    //             const response = await fetch("/api/refresh-channels", {
+    //                 method: "POST",
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                 },
+    //             });
 
-                if (response.ok) {
-                    // Reload the page to show new data
-                    window.location.reload();
-                } else {
-                    console.error("Failed to refresh channels");
-                    // Hide loading indicator
-                    if (loadingIndicator) {
-                        loadingIndicator.classList.add("hidden");
-                    }
-                    alert(
-                        "Failed to refresh channel data. Please try again later.",
-                    );
-                }
-            } catch (error) {
-                console.error("Error refreshing channels:", error);
-                // Hide loading indicator
-                if (loadingIndicator) {
-                    loadingIndicator.classList.add("hidden");
-                }
-                alert(
-                    "Error refreshing channel data. Please check your connection and try again.",
-                );
-            }
-        });
-    }
+    //             if (response.ok) {
+    //                 // Reload the page to show new data
+    //                 window.location.reload();
+    //             } else {
+    //                 console.error("Failed to refresh channels");
+    //                 // Hide loading indicator
+    //                 if (loadingIndicator) {
+    //                     loadingIndicator.classList.add("hidden");
+    //                 }
+    //                 alert(
+    //                     "Failed to refresh channel data. Please try again later.",
+    //                 );
+    //             }
+    //         } catch (error) {
+    //             console.error("Error refreshing channels:", error);
+    //             // Hide loading indicator
+    //             if (loadingIndicator) {
+    //                 loadingIndicator.classList.add("hidden");
+    //             }
+    //             alert(
+    //                 "Error refreshing channel data. Please check your connection and try again.",
+    //             );
+    //         }
+    //     });
+    // }
 </script>

@@ -7,14 +7,51 @@ const {
 } = Astro.props;
 ---
 
-<html lang="es">
+<html lang="en">
   <head>
+    <!-- Metadatos esenciales -->
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- SEO mejorado -->
     <title>{title}</title>
-    </head
->
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={Astro.url.href} />
+
+    <!-- Open Graph / compartir en redes sociales -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL("/og-image.png", Astro.url)} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Optimización de rendimiento -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <meta name="theme-color" content="#0a0a0a" />
+
+    <!-- Favicon y Apple touch icon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Precargar recursos críticos -->
+    <link
+      rel="preload"
+      href="/fonts/main-font.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+  </head>
 
   <body class="min-h-screen bg-neutral-950 text-white font-sans antialiased">
     <Nav />
