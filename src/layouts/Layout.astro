@@ -3,7 +3,7 @@ import "@styles/global.css";
 import Nav from "@components/Nav.astro";
 const {
   title = "The Clerk Project",
-  description = "This is a description of The Clerk Project.",
+  description = "The Clerk Project is an open-source initiative aimed at providing a comprehensive solution for identity management and authentication in modern web applications.",
 } = Astro.props;
 ---
 
@@ -27,7 +27,7 @@ const {
     <meta property="og:url" content={Astro.url.href} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL("/og-image.png", Astro.url)} />
+    <meta property="og:image" content={new URL("/og-image.webp", Astro.url)} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -35,22 +35,10 @@ const {
     <meta name="twitter:description" content={description} />
 
     <!-- Optimización de rendimiento -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
     <meta name="theme-color" content="#0a0a0a" />
 
     <!-- Favicon y Apple touch icon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-
-    <!-- Precargar recursos críticos -->
-    <link
-      rel="preload"
-      href="/fonts/main-font.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.webp" />
   </head>
 
   <body class="min-h-screen bg-neutral-950 text-white font-sans antialiased">

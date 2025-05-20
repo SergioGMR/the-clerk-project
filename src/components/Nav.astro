@@ -7,11 +7,10 @@ import {
     SignedIn,
     SignedOut,
     UserButton,
-    SignInButton,
-    GoogleOneTap,
+    SignInButton
 } from "@clerk/astro/components";
 
-const { title = "Teddy Bear" } = Astro.props;
+const { title = "The Clerk Project" } = Astro.props;
 
 // Get the current path to determine active nav item
 const currentPath = Astro.url.pathname;
@@ -73,7 +72,6 @@ const navItems = [
             <!-- User profile/login -->
             <div class="hidden md:block">
                 <div class="flex items-center">
-                    <GoogleOneTap />
                     <SignedIn>
                         <div class="w-52 flex justify-end">
                             <UserButton showName />
